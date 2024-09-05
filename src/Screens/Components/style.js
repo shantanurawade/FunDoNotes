@@ -42,6 +42,8 @@ export const style = StyleSheet.create({
 
     },
     noteStyleList: {
+
+        
         padding: 5,
         margin: 4,
         width: height > width ? width * 0.98 : width * 2,
@@ -92,6 +94,7 @@ export const style = StyleSheet.create({
         flexDirection: 'row'
     },
     text: {
+        
         color: 'black',
         textAlign: 'center'
     },

@@ -1,13 +1,22 @@
 import { Text, View, Pressable, TextInput, Image, ScrollView } from 'react-native';
 import { style } from './Components/style';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { OpenModalForLogout, OpenModalForCreateNote } from './Modal';
+import auth from '@react-native-firebase/auth';
 import Notes from './Notes';
 
 
 
+
 export function Home(props: any) {
+
+    useEffect(() => {
+        const user = auth().currentUser?.email;
+        if (user) console.warn(user);
+        else console.log('no user');
+    }, []);
+
     const [isGrid, setGrid] = useState(false);
     const [isModalOpenForLogout, setModalForLogout] = useState(false)
     const [isModalOpenForCreateNote, setModalForCreateNote] = useState(false)

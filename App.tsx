@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import AutheticationScreen from './src/Screens/AutheticationScreen';
+import AutheticationScreen from './src/Screens/Login/AutheticationScreen';
 import MainScreen from './src/Screens/MainScreen';
 
 //Stack varible which used to store and use "createNativeStackNavigator". 

@@ -1,10 +1,11 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { style } from "./Components/style";
+import { View, Text, Pressable, ScrollView, ToastAndroid } from "react-native";
+import { style } from "../Components/style";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import auth, { firebase } from '@react-native-firebase/auth';
+import auth, {  } from '@react-native-firebase/auth';
 import { ActivityIndicator, TextInput } from "react-native-paper";
 import firestore from '@react-native-firebase/firestore';
+import { UserCredential } from "firebase/auth";
 
 
 
@@ -29,14 +30,29 @@ function SignUp(props: any) {
 
         setLoading(true)
 
-        auth().createUserWithEmailAndPassword(email, password).then(() => {
+        auth().createUserWithEmailAndPassword(email, password).then((UserCredential) => {
             //After successfull signUp this code will navigate to login screen.
             setEmail('');
             setPassword('')
             props.navigation.navigate("Login")
-            console.warn("Account Created");
+            ToastAndroid.show("Account Created!", ToastAndroid.SHORT);
+
+            const user = UserCredential.user;
+
+            user.updateProfile(
+                {displayName: `${firstName} ${lastName}`}
+            ).catch((error)=>{
+                console.log('====================================');
+                console.log(error);
+                console.log('====================================');
+            })
+
+            
             firestore().collection('User').add({ name: 'shantanu rawade' })
             setLoading(false)
+
+            
+            
         }).catch(error => {
 
             //Code to show errors.

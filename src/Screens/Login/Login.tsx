@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Image, KeyboardAvoidingView, ScrollView, ActivityIndicator } from "react-native";
-import { style } from "./Components/style";
+import { style } from "../Components/style";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import auth from '@react-native-firebase/auth';
@@ -41,6 +41,8 @@ function Login(props: any) {
             props.navigation.navigate('MainScreen')
             setEmail('')
             setPassword('')
+            console.warn(responce);
+
             setActivityLoader(false);
         }).catch(error => {
             setActivityLoader(false);
@@ -75,7 +77,7 @@ function Login(props: any) {
 
             <View style={style.setMargin}>
                 <KeyboardAvoidingView>
-                    <ScrollView>
+                    <ScrollView showsVerticalScrollIndicator={false}>
 
                         <Text style={[style.text, style.mediumText, style.setMargin]}>Login</Text>
 
@@ -89,8 +91,11 @@ function Login(props: any) {
                         }
 
                         {/* Input for Password.*/}
-                        <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Password" value={password} mode="outlined" onChangeText={(value) => { setPassword(value); setErrorForPassword(false) }}></TextInput>
-
+                        <View>
+                            <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Password" value={password} secureTextEntry mode="outlined" onChangeText={(value) => { setPassword(value); setErrorForPassword(false) }}></TextInput>
+                            <Pressable style={{borderWidth  :2}}></Pressable>
+                            <Text>Show password</Text>
+                        </View>
                         {/* Error for wrong credintials.*/}
                         {
                             isErrorForPassword ?
@@ -120,9 +125,9 @@ function Login(props: any) {
                         <View style={style.setRow}>
                             <Text style={[style.smallText, style.setPadding, { color: 'black' }]}>Login with : </Text>
                             <Pressable onPress={() => { onLoginWithGoogle() }}>
-                                <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Google.png')} />
+                                <Image style={[style.profilePic, style.setSpacing]} source={require('../../../Assets/Images/Google.png')} />
                             </Pressable>
-                            <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Facebook.png')} />
+                            <Image style={[style.profilePic, style.setSpacing]} source={require('../../../Assets/Images/Facebook.png')} />
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>

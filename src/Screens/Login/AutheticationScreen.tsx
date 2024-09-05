@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./Login";
-import SignUp from "./SignUp";
+import SignUp from './SignUp';
 
 //Stack varible which used to store and use "createNativeStackNavigator".
 const Stack = createNativeStackNavigator();

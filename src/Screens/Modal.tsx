@@ -2,6 +2,11 @@ import { Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, ToastAnd
 import { style } from './Components/style';
 import auth from '@react-native-firebase/auth'
 import { noteOther } from './Notes';
+import { useState, useEffect } from 'react';
+
+
+
+
 
 export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalForCreateNote: any) {
     return (
@@ -18,11 +23,11 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
     )
 }
 
-export function Note(index: any, onClickNote : any) {
+export function Note(index: any, onClickNote: any) {
 
     return (
         <Modal visible={onClickNote} animationType='fade' transparent={true}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
                 <Text key={index}>{noteOther.map((note) => note.Title)}</Text>
                 <Text>Hello</Text>
             </View>
@@ -30,7 +35,22 @@ export function Note(index: any, onClickNote : any) {
     )
 }
 
+
 export function OpenModalForLogout(isModalOpen: any, setModalOpen: any, props: any) {
+
+    const [userName, setUserName] = useState('No name');
+
+    const user = auth().currentUser;
+    // useEffect(() => {
+    //     const user = auth().currentUser;
+    //     console.log('====================================');
+    //     console.log(user);
+    //     console.log('====================================');
+    //     if (user) {
+    //         setUserName(user.displayName); // This will be the full name
+    //     }
+    // }, []);
+
     const onLogOut = () => {
         auth().signOut().then(() => {
             props.navigation.navigate('AutheticationScreen')
@@ -49,8 +69,7 @@ export function OpenModalForLogout(isModalOpen: any, setModalOpen: any, props: a
                         <Image source={require('../../Assets/Images/Shantanu.jpg')}
                             style={[style.largeProfilePic, style.setPadding, { alignItems: 'flex-start' }]} />
 
-                        <Text style={{ fontSize: 30 }}>Shantanu Rawade</Text>
-
+                        <Text style={{ fontSize: 30 }}>{user?.displayName}</Text>
 
                         <Pressable
                             onPress={() => onLogOut()}><Text style={[style.mediumText, style.setPadding, { color: 'red' }]}>LogOut</Text></Pressable>

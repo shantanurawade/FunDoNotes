@@ -1,4 +1,4 @@
-package com.fundonotes
+package com.fundonotes.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
