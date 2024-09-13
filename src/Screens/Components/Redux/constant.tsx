@@ -1,1 +1,1 @@
-export const OPEN_NOTES = 'openNotes'
+export const LOGGED_IN = 'loggedIn'

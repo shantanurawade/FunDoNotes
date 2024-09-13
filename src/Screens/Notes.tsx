@@ -2,9 +2,6 @@ import { Pressable, Text, View } from 'react-native';
 import { style } from './Components/style';
 import React, { useState } from 'react';
 import { Note } from './Modal';
-import { openNotes } from './Components/Redux/action';
-import { useDispatch } from 'react-redux';
-
 
 
 export default function Notes(props: any) {

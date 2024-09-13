@@ -1,9 +1,9 @@
-import { OPEN_NOTES } from "./constant";
+import { LOGGED_IN } from "./constant";
 
 
 export function openNotes (item: any){
     return{
-        type : OPEN_NOTES,
+        type : LOGGED_IN,
         data : item
     }
 }

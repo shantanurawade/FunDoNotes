@@ -72,7 +72,7 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
                 <ScrollView style={{ flexGrow: 1 }}>
 
                     <View style={[style.setRow, { height: '32%', justifyContent: 'space-between', borderWidth: 1 }]}>
-                        <Pressable onPress={() => { saveNote(Title, Discription); setModalForCreateNote(false); }}>
+                        <Pressable onPress={() => { saveNote(Title, Discription); setModalForCreateNote(false); setDiscription(''); setTitle('');}}>
                             <Text style={{ fontSize: 50 }}>{'<'} </Text>
                         </Pressable>
                         <View style={{ alignItems: 'center', flexDirection: 'row' }}>

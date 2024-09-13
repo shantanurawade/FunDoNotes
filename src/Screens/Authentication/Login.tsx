@@ -7,9 +7,10 @@ import { TextInput } from "react-native-paper";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-GoogleSignin.configure({
-    webClientId: '118005057864-8kit1pf3o7jjcg2sg93a0t6bsuj1g61q.apps.googleusercontent.com',
-});
+
+// GoogleSignin.configure({
+//     webClientId: '118005057864-8g61q.apps.googleusercontent.com',
+// });
 
 async function onGoogleButtonPress() {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -36,13 +37,15 @@ function Login(props: any) {
     //Function for handleing firebase signIn. 
     const onLogin = () => {
         setActivityLoader(true);
-        auth().signInWithEmailAndPassword(email, password).then((responce) => {
+        auth().signInWithEmailAndPassword(email, password).then(() => {
 
             //After successfull signIn this code will navigate to mainscreen.
             props.navigation.navigate('MainScreen')
             setEmail('')
             setPassword('')
             setActivityLoader(false);
+            // const user = auth().currentUser;
+            // handleLogin(user);
         }).catch(error => {
             setActivityLoader(false);
             //Code to show errors.
@@ -118,6 +121,7 @@ function Login(props: any) {
                             onPress={() => {
                                 if (email != '' && password != '') onLogin();
                                 else setErrorForPassword(true)
+                                setErrorForNetwork(false)
                             }}
                             style={[style.container, style.button, style.setMarginTop]}>
                             {isActivityLoading ? <ActivityIndicator size='large' color='#00ff00' /> : 
@@ -132,7 +136,8 @@ function Login(props: any) {
                         {/*Social media login options.*/}
                         <View style={style.setRow}>
                             <Text style={[style.smallText, style.setPadding, { color: 'black' }]}>Login with : </Text>
-                            <Pressable onPress={() => { onLoginWithGoogle() }}>
+                            <Pressable onPress={() => { console.log(auth().currentUser);
+                             }}>
                                 <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Google.png')} />
                             </Pressable>
                             <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Facebook.png')} />
