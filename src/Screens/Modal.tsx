@@ -2,36 +2,9 @@ import { Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, Keyboard
 import { style } from './Components/style';
 import auth from '@react-native-firebase/auth'
 // import Notes, { noteOther } from './Notes';
-import { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { useState } from 'react';
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
-const readNotes = async () => {
-    const db = getFirestore();
-    const uid = auth().currentUser;
-
-    try {
-        if (uid) {
-            // Reference to the "notes" collection under the specific user
-            const notesRef = collection(db, "users", uid.uid, "notes");
-
-            // Fetch all documents in the user's "notes" collection
-            const querySnapshot = await getDocs(notesRef);
-
-            // Create an array to store the notes
-            const notes : any = [];
-            querySnapshot.forEach((doc) => {
-                notes.push({ ...doc.data(), id: doc.id });
-            });
-
-            console.log("Notes fetched successfully!", notes);
-            return notes; // Return the fetched notes
-        } else {
-            console.warn("User not logged in");
-        }
-    } catch (error) {
-        console.log("Error fetching notes: ", error);
-    }
-};
 
 // useEffect(()=> {
 // // readNotes()
@@ -46,7 +19,10 @@ const saveNote = async (title: string, description: string) => {
     const uid = auth().currentUser;
 
     console.warn(db);
-    
+    console.log('====================================');
+    console.log("ffe");
+    console.log('====================================');
+
     try {
         if (uid) {
             await setDoc(doc(db, "users", uid.uid, "notes", title), {
@@ -72,7 +48,15 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
                 <ScrollView style={{ flexGrow: 1 }}>
 
                     <View style={[style.setRow, { height: '32%', justifyContent: 'space-between', borderWidth: 1 }]}>
-                        <Pressable onPress={() => { saveNote(Title, Discription); setModalForCreateNote(false); setDiscription(''); setTitle('');}}>
+                        <Pressable onPress={() => {
+                            saveNote(Title, Discription);
+                            console.log('====================================');
+                            console.log('save');
+                            console.log('====================================');
+                            setModalForCreateNote(false);
+                            setDiscription('');
+                            setTitle('');
+                        }}>
                             <Text style={{ fontSize: 50 }}>{'<'} </Text>
                         </Pressable>
                         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
@@ -85,10 +69,10 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
 
 
                     <TextInput placeholder='Title' value={Title} multiline
-                        onChangeText={(value) => setTitle(value)} style={{ width: '100%', fontSize: 50}} />
+                        onChangeText={(value) => setTitle(value)} style={{ width: '100%', fontSize: 50 }} />
 
                     <TextInput placeholder='Discription' value={Discription}
-                        onChangeText={(value) => setDiscription(value)} style={{ width: '100%', fontSize: 25, borderWidth:1 }} />
+                        onChangeText={(value) => setDiscription(value)} style={{ width: '100%', fontSize: 25, borderWidth: 1 }} />
                 </ScrollView>
 
             </KeyboardAvoidingView>
