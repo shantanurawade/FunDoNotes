@@ -2,7 +2,7 @@ import { View, Text, Pressable, ScrollView, ToastAndroid } from "react-native";
 import { style } from "../Components/style";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import auth, {  } from '@react-native-firebase/auth';
+import auth, { } from '@react-native-firebase/auth';
 import { ActivityIndicator, TextInput } from "react-native-paper";
 import firestore from '@react-native-firebase/firestore';
 import { UserCredential } from "firebase/auth";
@@ -24,6 +24,8 @@ function SignUp(props: any) {
     const [isErrorForEmptyPassword, setErrorForEmptyPassword] = useState(false)
     const [isErrorForConfirmPassword, setErrorForConfirmPassword] = useState(false)
     const [isLoading, setLoading] = useState(false)
+    const [isChecked, setChecked] = useState(false);
+
 
     //Function for handleing firebase signUp. 
     const onRegister = () => {
@@ -40,19 +42,19 @@ function SignUp(props: any) {
             const user = UserCredential.user;
 
             user.updateProfile(
-                {displayName: `${firstName} ${lastName}`}
-            ).catch((error)=>{
+                { displayName: `${firstName} ${lastName}` }
+            ).catch((error) => {
                 console.log('====================================');
                 console.log(error);
                 console.log('====================================');
             })
 
-            
+
             firestore().collection('User').add({ name: 'shantanu rawade' })
             setLoading(false)
 
-            
-            
+
+
         }).catch(error => {
 
             //Code to show errors.
@@ -76,7 +78,7 @@ function SignUp(props: any) {
         <SafeAreaView style={[style.container, style.setFlex1]}>
             <ScrollView>
                 <View style={style.setMargin}>
-                    
+
                     <Text style={[style.mediumText, style.text]}>Registration</Text>
 
                     {/* Input for First Name.*/}
@@ -112,8 +114,17 @@ function SignUp(props: any) {
                     }
 
                     {/* Input for Password.*/}
-                    <TextInput style={style.signUpTextInput} label="Password" value={password} mode="outlined" onChangeText={(value) => { setPassword(value); setErrorForPassword(false); setErrorForEmptyPassword(false) }} />
+                    <TextInput style={style.signUpTextInput} secureTextEntry={!isChecked} label="Password" value={password} mode="outlined" onChangeText={(value) => { setPassword(value); setErrorForPassword(false); setErrorForEmptyPassword(false) }} />
+                    <View style={[style.setRow, { marginTop: 16 }]}>
 
+                        <Pressable style={[{ width: 20, borderWidth: 1, backgroundColor: isChecked ? '#2596be' : 'white' }]} onPress={() => {
+                            setChecked(!isChecked);
+
+                        }}>
+                            <Text style={{ color: 'white', textAlign: 'center' }}>✓</Text>
+                        </Pressable>
+                        <Text style={{ flex: 1 }}>  Show password</Text>
+                    </View>
 
                     {
                         isErrorForEmptyPassword ?
@@ -121,7 +132,7 @@ function SignUp(props: any) {
                     }
 
                     {/* Comfirmation for Password.*/}
-                    <TextInput style={style.signUpTextInput} label="Comfirm Password" value={confirmPassword} mode="outlined" onChangeText={(value) => {
+                    <TextInput style={style.signUpTextInput} label="Comfirm Password" value={confirmPassword} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => {
                         setConfirmPassword(value);
                     }} />
                     {/* Error for weak password.*/}

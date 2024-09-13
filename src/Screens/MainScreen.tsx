@@ -1,9 +1,9 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Home } from "./Home";
-import { Option } from "./Option"
-import Reminders from "./Reminders";
-import Archive from "./Archive";
-import Bin from "./Bin";
+import { Home } from "./Components/DrawerOptions/Home";
+import { Option } from "./Components/DrawerOptions/Option"
+import Reminders from "./Components/DrawerOptions/Reminders";
+import Archive from "./Components/DrawerOptions/Archive";
+import Bin from "./Components/DrawerOptions/Bin";
 
 const Drawer = createDrawerNavigator();
 

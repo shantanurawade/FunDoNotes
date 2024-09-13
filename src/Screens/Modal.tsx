@@ -1,35 +1,115 @@
-import { Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, ToastAndroid } from 'react-native';
+import { Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, KeyboardAvoidingView, ToastAndroid, ScrollView, TextInput } from 'react-native';
 import { style } from './Components/style';
 import auth from '@react-native-firebase/auth'
-import { noteOther } from './Notes';
-import { useState, useEffect } from 'react';
+// import Notes, { noteOther } from './Notes';
+import { useEffect, useState } from 'react';
+import { getFirestore, collection, getDocs, doc, setDoc } from "firebase/firestore";
 
+const readNotes = async () => {
+    const db = getFirestore();
+    const uid = auth().currentUser;
 
+    try {
+        if (uid) {
+            // Reference to the "notes" collection under the specific user
+            const notesRef = collection(db, "users", uid.uid, "notes");
 
+            // Fetch all documents in the user's "notes" collection
+            const querySnapshot = await getDocs(notesRef);
 
+            // Create an array to store the notes
+            const notes : any = [];
+            querySnapshot.forEach((doc) => {
+                notes.push({ ...doc.data(), id: doc.id });
+            });
+
+            console.log("Notes fetched successfully!", notes);
+            return notes; // Return the fetched notes
+        } else {
+            console.warn("User not logged in");
+        }
+    } catch (error) {
+        console.log("Error fetching notes: ", error);
+    }
+};
+
+// useEffect(()=> {
+// // readNotes()
+// console.log('====================================');
+// console.log(readNotes());
+// console.log('====================================');
+// },[])
+
+const saveNote = async (title: string, description: string) => {
+
+    const db = getFirestore();
+    const uid = auth().currentUser;
+
+    console.warn(db);
+    
+    try {
+        if (uid) {
+            await setDoc(doc(db, "users", uid.uid, "notes", title), {
+                title: title,
+                description: description,
+            });
+            console.log("Note saved successfully!");
+        }
+        else console.warn("User Not Logged in");
+    } catch (error) {
+        console.log("Error saving note: ", error);
+    }
+};
 
 export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalForCreateNote: any) {
+    const [Title, setTitle] = useState('');
+    const [Discription, setDiscription] = useState('');
+
     return (
         <Modal visible={isModalOpenForCreateNote} animationType='slide' >
-            <View style={[style.setRow, { flex: 1 }]}>
-                <Pressable onPress={() => { setModalForCreateNote(false) }}><Text style={{ fontSize: 50 }}>{'<'} </Text></Pressable>
-                <Pressable ><Text style={{ fontSize: 50 }}>Pin</Text></Pressable>
-                <Pressable ><Text style={{ fontSize: 50 }}>Remi</Text></Pressable>
-                <Pressable ><Text style={{ fontSize: 50 }}>Arch</Text></Pressable>
+            <KeyboardAvoidingView behavior={'height'}
+                style={{ height: '100%' }}>
+                <ScrollView style={{ flexGrow: 1 }}>
 
-            </View>
+                    <View style={[style.setRow, { height: '32%', justifyContent: 'space-between', borderWidth: 1 }]}>
+                        <Pressable onPress={() => { saveNote(Title, Discription); setModalForCreateNote(false); }}>
+                            <Text style={{ fontSize: 50 }}>{'<'} </Text>
+                        </Pressable>
+                        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                            <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>🖇️</Text></Pressable>
+                            <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>🔔</Text></Pressable>
+                            <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>📩</Text></Pressable>
+                        </View>
+
+                    </View>
+
+
+                    <TextInput placeholder='Title' value={Title} multiline
+                        onChangeText={(value) => setTitle(value)} style={{ width: '100%', fontSize: 50}} />
+
+                    <TextInput placeholder='Discription' value={Discription}
+                        onChangeText={(value) => setDiscription(value)} style={{ width: '100%', fontSize: 25, borderWidth:1 }} />
+                </ScrollView>
+
+            </KeyboardAvoidingView>
 
         </Modal>
     )
 }
 
-export function Note(index: any, onClickNote: any) {
+export function Note(index: any, onClickNote: any, setOnClickNote: any) {
 
     return (
-        <Modal visible={onClickNote} animationType='fade' transparent={true}>
-            <View style={{ flex: 1 }}>
-                <Text key={index}>{noteOther.map((note) => note.Title)}</Text>
-                <Text>Hello</Text>
+        <Modal visible={onClickNote} animationType='fade' >
+            <View style={{ height: 500 }}>
+                <Pressable onPress={() => setOnClickNote(false)}>
+                    <Text style={style.largeText}>  {"<"}</Text>
+                </Pressable>
+
+                {/* <TextInput value={noteOther[index].Title} onChangeText={() => { }} style={[style.mediumText, { borderWidth: 2, width: '100%', paddingTop: 50, alignItems: 'center' }]} ></TextInput>
+
+                <TextInput multiline={true} style={[style.discription, { height: 500, borderWidth: 1 }]}>{noteOther[index].Discription}{'\n'}</TextInput> */}
+                <Text ></Text>
             </View>
         </Modal>
     )
@@ -41,20 +121,10 @@ export function OpenModalForLogout(isModalOpen: any, setModalOpen: any, props: a
     const [userName, setUserName] = useState('No name');
 
     const user = auth().currentUser;
-    // useEffect(() => {
-    //     const user = auth().currentUser;
-    //     console.log('====================================');
-    //     console.log(user);
-    //     console.log('====================================');
-    //     if (user) {
-    //         setUserName(user.displayName); // This will be the full name
-    //     }
-    // }, []);
-
     const onLogOut = () => {
         auth().signOut().then(() => {
-            props.navigation.navigate('AutheticationScreen')
-            ToastAndroid.show("This is a toast message!", ToastAndroid.SHORT);
+            props.navigation.navigate('AuthenticationScreen')
+            ToastAndroid.show("Logged out!", ToastAndroid.SHORT);
         })
     }
     return (
@@ -66,7 +136,7 @@ export function OpenModalForLogout(isModalOpen: any, setModalOpen: any, props: a
 
                     <View style={[{ alignItems: 'center', backgroundColor: 'white', height: '40%', width: '90%', borderRadius: 20 }]}>
                         <Text style={[style.mediumText, style.setMarginTop, { color: 'black' }]}>Fun Do Notes</Text>
-                        <Image source={require('../../Assets/Images/Shantanu.jpg')}
+                        <Image source={require('../Assets/Images/Shantanu.jpg')}
                             style={[style.largeProfilePic, style.setPadding, { alignItems: 'flex-start' }]} />
 
                         <Text style={{ fontSize: 30 }}>{user?.displayName}</Text>

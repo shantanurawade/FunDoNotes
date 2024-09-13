@@ -1,4 +1,4 @@
-package com.fundonotes.app
+package com.fundonote.app
 
 import android.app.Application
 import com.facebook.react.PackageList

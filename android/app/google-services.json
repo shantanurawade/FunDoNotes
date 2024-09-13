@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "118005057864",
-    "project_id": "fundonotes-f8495",
-    "storage_bucket": "fundonotes-f8495.appspot.com"
+    "project_number": "799467742576",
+    "project_id": "fun-do-notes-5b6e2",
+    "storage_bucket": "fun-do-notes-5b6e2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:118005057864:android:f7dcf7062eecd12e5b0b7d",
+        "mobilesdk_app_id": "1:799467742576:android:8a28ff037c89df100fdbb5",
         "android_client_info": {
-          "package_name": "com.fundonotes.app"
+          "package_name": "com.fundonote.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "118005057864-8kit1pf3o7jjcg2sg93a0t6bsuj1g61q.apps.googleusercontent.com",
+          "client_id": "799467742576-eplfehp1jaf85ee0rcqb7knn9v255ibb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.fundonotes.app",
+            "package_name": "com.fundonote.app",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "118005057864-1rmruo744dhls37477i8bdhimqo5u7oa.apps.googleusercontent.com",
+          "client_id": "799467742576-dr6mfrc2o8n8q5gd32l3ah8iiqj85kei.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAVYHRjkoSdIvWr-fkDV71CtsMLZxx9Zqg"
+          "current_key": "AIzaSyAO2nxCvTN2mpjTaUh3ybKhAerJFXDQY8I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "118005057864-1rmruo744dhls37477i8bdhimqo5u7oa.apps.googleusercontent.com",
+              "client_id": "799467742576-dr6mfrc2o8n8q5gd32l3ah8iiqj85kei.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -2,6 +2,10 @@ import { StyleSheet, Dimensions } from "react-native"
 
 const { height, width } = Dimensions.get('window');
 
+const getResponsiveFontSize = (size) => {
+    const baseWidth = 375;
+    return size * (width / baseWidth);
+  };
 
 export const style = StyleSheet.create({
     mainHome: {
@@ -39,11 +43,8 @@ export const style = StyleSheet.create({
         margin: 4,
         width: width * 0.48,
         height: height * 0.2
-
     },
     noteStyleList: {
-
-        
         padding: 5,
         margin: 4,
         width: height > width ? width * 0.98 : width * 2,
@@ -64,19 +65,28 @@ export const style = StyleSheet.create({
         color: '#2596be'
     },
     largeText: {
-        fontSize: 45
+        color:'black',
+        fontSize: getResponsiveFontSize(45)
     },
     mediumText: {
-        fontSize: 30
+        color:'black',
+        fontSize: getResponsiveFontSize(28)
+    },
+    discription:{
+        fontSize: getResponsiveFontSize(18),
+        color: 'grey'
     },
     smallText: {
-        fontSize: 20
+        color:'black',
+        fontSize: getResponsiveFontSize(18)
     },
     xSmallText: {
-        fontSize: 10
+        color:'black',
+        fontSize: getResponsiveFontSize(10)
     },
     xxSmallText: {
-        fontSize: 5
+        color:'black',
+        fontSize: getResponsiveFontSize(5)
     },
     setFlex1: {
         flex: 1

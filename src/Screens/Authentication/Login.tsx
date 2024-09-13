@@ -8,7 +8,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 GoogleSignin.configure({
-    webClientId: '1:118005057864:android:85daaa659edfc5195b0b7d',
+    webClientId: '118005057864-8kit1pf3o7jjcg2sg93a0t6bsuj1g61q.apps.googleusercontent.com',
 });
 
 async function onGoogleButtonPress() {
@@ -28,6 +28,7 @@ function Login(props: any) {
     //State to manage userinputs and display errors.
     const [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
+    const [isChecked, setChecked] = useState(false);
     const [isEmailErrorForInvalid, setEmailErrorForInvalid] = useState(false)
     const [isErrorForPassword, setErrorForPassword] = useState(false)
     const [isErrorForNetwork, setErrorForNetwork] = useState(false)
@@ -41,8 +42,6 @@ function Login(props: any) {
             props.navigation.navigate('MainScreen')
             setEmail('')
             setPassword('')
-            console.warn(responce);
-
             setActivityLoader(false);
         }).catch(error => {
             setActivityLoader(false);
@@ -91,11 +90,19 @@ function Login(props: any) {
                         }
 
                         {/* Input for Password.*/}
-                        <View>
-                            <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Password" value={password} secureTextEntry mode="outlined" onChangeText={(value) => { setPassword(value); setErrorForPassword(false) }}></TextInput>
-                            <Pressable style={{borderWidth  :2}}></Pressable>
-                            <Text>Show password</Text>
+
+                        <TextInput style={{ marginTop: 10 }} label="Password" value={password} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => { setPassword(value); setErrorForPassword(false) }} />
+                        <View style={[style.setRow, { marginTop: 16 }]}>
+
+                            <Pressable style={[{ width: 20, borderWidth: 1, backgroundColor: isChecked ? '#2596be' : 'white' }]} onPress={() => {
+                                setChecked(!isChecked);
+
+                            }}>
+                                <Text style={{ color: 'white', textAlign: 'center' }}>✓</Text>
+                            </Pressable>
+                            <Text style={{ flex: 1 }}>  Show password</Text>
                         </View>
+
                         {/* Error for wrong credintials.*/}
                         {
                             isErrorForPassword ?
@@ -113,7 +120,8 @@ function Login(props: any) {
                                 else setErrorForPassword(true)
                             }}
                             style={[style.container, style.button, style.setMarginTop]}>
-                            {isActivityLoading ? <ActivityIndicator size='large' color='#00ff00' /> : <Text style={[style.text, style.smallText]}>Login</Text>}
+                            {isActivityLoading ? <ActivityIndicator size='large' color='#00ff00' /> : 
+                            <Text style={[style.text, style.smallText]}>Login</Text>}
                         </Pressable>
 
                         {/*SignUp option for new user.*/}
@@ -125,9 +133,9 @@ function Login(props: any) {
                         <View style={style.setRow}>
                             <Text style={[style.smallText, style.setPadding, { color: 'black' }]}>Login with : </Text>
                             <Pressable onPress={() => { onLoginWithGoogle() }}>
-                                <Image style={[style.profilePic, style.setSpacing]} source={require('../../../Assets/Images/Google.png')} />
+                                <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Google.png')} />
                             </Pressable>
-                            <Image style={[style.profilePic, style.setSpacing]} source={require('../../../Assets/Images/Facebook.png')} />
+                            <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Facebook.png')} />
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>

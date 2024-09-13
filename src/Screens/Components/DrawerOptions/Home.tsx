@@ -1,10 +1,10 @@
 import { Text, View, Pressable, TextInput, Image, ScrollView } from 'react-native';
-import { style } from './Components/style';
+import { style } from '../../Components/style';
 import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { OpenModalForLogout, OpenModalForCreateNote } from './Modal';
+import { OpenModalForLogout, OpenModalForCreateNote } from '../../Modal';
 import auth from '@react-native-firebase/auth';
-import Notes from './Notes';
+import Notes from '../../Notes';
 
 
 
@@ -49,7 +49,7 @@ export function Home(props: any) {
 
                         <Pressable style={{ width: '16%' }} onPress={() => { setModalForLogout(true) }}>
 
-                            <Image source={require('../../Assets/Images/Shantanu.jpg')}
+                            <Image source={require('../../../Assets/Images/Shantanu.jpg')}
                                 style={[style.profilePic]} />
 
                         </Pressable>
@@ -76,7 +76,7 @@ export function Home(props: any) {
                 </View>
             </View>
             <Pressable onPress={() => setModalForCreateNote(true)} style={style.createButton}>
-                <Text style={[{ color: 'red', textAlign: 'center' }, style.largeText]}>+</Text>
+                <Text style={[{ color: 'red', textAlign: 'center', fontSize:50 }]}>+</Text>
             </Pressable>
         </SafeAreaView>
     )
