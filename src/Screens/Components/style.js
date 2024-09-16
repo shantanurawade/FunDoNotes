@@ -5,12 +5,17 @@ const { height, width } = Dimensions.get('window');
 const getResponsiveFontSize = (size) => {
     const baseWidth = 375;
     return size * (width / baseWidth);
-  };
+};
 
 export const style = StyleSheet.create({
     mainHome: {
         alignContent: 'center',
         backgroundColor: '#f2f2ea'
+    },
+    createNoteNavigationPanel: {
+        height: height * 0.08,
+        justifyContent: 'space-between',
+        borderWidth: 1
     },
     createButton: {
         borderRadius: 40,
@@ -48,7 +53,7 @@ export const style = StyleSheet.create({
         padding: 5,
         margin: 4,
         width: height > width ? width * 0.98 : width * 2,
-        height: height > width ? height * 0.20 : height *.25
+        height: height > width ? height * 0.20 : height * .25
     },
     container: {
         alignItems: 'center',
@@ -65,27 +70,27 @@ export const style = StyleSheet.create({
         color: '#2596be'
     },
     largeText: {
-        color:'black',
+        color: 'black',
         fontSize: getResponsiveFontSize(45)
     },
     mediumText: {
-        color:'black',
+        color: 'black',
         fontSize: getResponsiveFontSize(28)
     },
-    discription:{
+    discription: {
         fontSize: getResponsiveFontSize(18),
         color: 'grey'
     },
     smallText: {
-        color:'black',
+        color: 'black',
         fontSize: getResponsiveFontSize(18)
     },
     xSmallText: {
-        color:'black',
+        color: 'black',
         fontSize: getResponsiveFontSize(10)
     },
     xxSmallText: {
-        color:'black',
+        color: 'black',
         fontSize: getResponsiveFontSize(5)
     },
     setFlex1: {
@@ -104,7 +109,7 @@ export const style = StyleSheet.create({
         flexDirection: 'row'
     },
     text: {
-        
+
         color: 'black',
         textAlign: 'center'
     },

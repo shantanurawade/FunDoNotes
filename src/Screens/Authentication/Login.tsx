@@ -26,10 +26,10 @@ async function onGoogleButtonPress() {
 
 
 function Login(props: any) {
-    //State to manage userinputs and display errors.
-    const [userCredential, setUserCredential] = useState({email:'',password:''})
+    //State to manage userinputs and display errors. 
+    const [userCredential, setUserCredential] = useState({ email: '', password: '' })
     const [isChecked, setChecked] = useState(false);
-    const [error, setError] = useState({ isInvalidEmail: false, isPasswordError: false, isNetworkError: false })
+    const [error, setError] = useState({ isInvalidEmail: false, isPasswordError: false, isNetworkError: false, isSomethingWentWrong: false })
 
     const [isActivityLoading, setActivityLoader] = useState(false)
     // const isLoading = useSelector((state: any) => state.reducer.isLoading)
@@ -50,24 +50,29 @@ function Login(props: any) {
             // setEmail('')
             // setPassword('')
             setActivityLoader(false);
+            setError({ isInvalidEmail: false, isPasswordError: false, isNetworkError: false, isSomethingWentWrong: false })
             const user = auth().currentUser;
 
             // dispatch(getUserSuccess(user))
             // handleLogin(user);
-        }).catch(error => {
+        }).catch(getError => {
             setActivityLoader(false);
             //Code to show errors.
-            if (error.code === 'auth/invalid-credential') {
+            if (getError.code === 'auth/invalid-credential') {
                 setError({ ...error, isPasswordError: true });
+
             }
-            if (error.code === 'auth/network-request-failed') {
+            if (getError.code === 'auth/network-request-failed') {
                 setError({ ...error, isNetworkError: true });
+        
             }
-            if (error.code === 'auth/invalid-email') {
+            if (getError.code === 'auth/invalid-email') {
                 setError({ ...error, isInvalidEmail: true });
+
             }
-            console.log(error);
-            // dispatch(getUserError(error))
+            // else setError({ ...error, isSomethingWentWrong: true })
+
+
         })
     }
     const onLoginWithGoogle = () => {
@@ -77,7 +82,7 @@ function Login(props: any) {
                     console.log('====================================');
                     console.log(error);
                     console.log('====================================');
-                }).catch((error)=>{
+                }).catch((error) => {
                     console.log('====================================');
                     console.log(error);
                     console.log('====================================');
@@ -97,7 +102,7 @@ function Login(props: any) {
                         <Text style={[style.text, style.mediumText, style.setMargin]}>Login</Text>
 
                         {/* Input for Email.*/}
-                        <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Email" value={userCredential.email} mode="outlined" onChangeText={(value) => { setUserCredential({...userCredential, email:value}); setError({ ...error, isInvalidEmail: false }) }}></TextInput>
+                        <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Email" value={userCredential.email} mode="outlined" onChangeText={(value) => { setUserCredential({ ...userCredential, email: value }); setError({ ...error, isInvalidEmail: false }) }}></TextInput>
 
                         {/* Error for invalid email.*/}
                         {
@@ -107,7 +112,7 @@ function Login(props: any) {
 
                         {/* Input for Password.*/}
 
-                        <TextInput style={{ marginTop: 10 }} label="Password" value={userCredential.password} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => { setUserCredential({...userCredential, password: value}); setError({ ...error, isPasswordError: false }) }} />
+                        <TextInput style={{ marginTop: 10 }} label="Password" value={userCredential.password} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => { setUserCredential({ ...userCredential, password: value }); setError({ ...error, isPasswordError: false }) }} />
                         <View style={[style.setRow, { marginTop: 16 }]}>
 
                             <Pressable style={[{ width: 200, flexDirection: 'row' }]} onPress={() => {
@@ -128,6 +133,10 @@ function Login(props: any) {
                         {
                             error.isNetworkError ?
                                 <Text style={{ color: 'red' }}> Please check your network conectivity.</Text> : null
+                        }
+                        {
+                            error.isSomethingWentWrong ?
+                                <Text style={{ color: 'red' }}> Somthing went wrong please try again.</Text> : null
                         }
 
                         {/* Login button.*/}
@@ -150,7 +159,7 @@ function Login(props: any) {
                         <View style={style.setRow}>
                             <Text style={[style.smallText, style.setPadding, { color: 'black' }]}>Login with : </Text>
                             <Pressable onPress={() => {
-            
+
                                 onLoginWithGoogle();
                             }}>
                                 <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Google.png')} />

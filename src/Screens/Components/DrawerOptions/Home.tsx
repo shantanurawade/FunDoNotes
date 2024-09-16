@@ -2,7 +2,7 @@ import { Text, View, Pressable, TextInput, Image, ScrollView } from 'react-nativ
 import { style } from '../../Components/style';
 import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { OpenModalForLogout, OpenModalForCreateNote } from '../../Modal';
+import { OpenModalForLogout, OpenModalForCreateNote } from '../../Modals/index';
 import Notes from '../../Notes';
 
 

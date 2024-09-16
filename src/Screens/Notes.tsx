@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { style } from './Components/style';
-import React, { useEffect, useState } from 'react';
-import { Note } from './Modal';
+import React, { useEffect, useId, useState } from 'react';
+import { ModalForNote } from './Modals/index';
 import { firebase } from '@react-native-firebase/auth';
 
 
@@ -18,7 +18,7 @@ export default function Notes(props: any) {
             const notesSnapshot = await db.collection("users").doc(userId).collection("notes").get();
 
             const notes = notesSnapshot.docs.map(doc => ({
-                Title: doc.id,
+                noteIndex : doc.id,
                 ...doc.data()
             }));
 
@@ -29,9 +29,6 @@ export default function Notes(props: any) {
 
         }
     }
-
-
-
 
     const [onClickNote, setOnClickNote] = useState(false)
     const [index, setIndex] = useState(0);
@@ -45,22 +42,23 @@ export default function Notes(props: any) {
     return (
         <View style={{ height: '84%' }}>
 
-            {Note(index, onClickNote, setOnClickNote)}
+            {ModalForNote(index, onClickNote, setOnClickNote)}
             <Text style={style.smallText}>Pined</Text>
 
             <View style={[style.setRow, { flexWrap: 'wrap' }]}>
 
-                {note.map((item: any, index: any) =>
+                {note.map((item: any) =>
 
-                    <Pressable key={index} onPress={() => {
-                        setIndex(index);
+                    <Pressable key={item.noteIndex} onPress={() => {
+                        setIndex(item.noteIndex);
                         console.warn(index);
                         setOnClickNote(true);
 
                     }} style={[isList ? style.noteStyleList : style.noteStyleGrid, style.border]}>
-
-                        <Text style={style.mediumText}>{item.Title}</Text>
-                        <Text style={style.discription} numberOfLines={5}>{item.description}</Text>
+                        <Text numberOfLines={5}>
+                            <Text style={style.mediumText}>{item.title}{'\n'}</Text>
+                            <Text style={style.discription} >{item.description}</Text>
+                        </Text>
                     </Pressable>
                 )}
 
@@ -83,3 +81,4 @@ export default function Notes(props: any) {
         </View >
     )
 }
+
