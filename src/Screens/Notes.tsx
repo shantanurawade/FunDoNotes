@@ -3,6 +3,8 @@ import { style } from './Components/style';
 import React, { useEffect, useId, useState } from 'react';
 import { ModalForNote } from './Modals/index';
 import { firebase } from '@react-native-firebase/auth';
+import SQLite from 'react-native-sqlite-2';
+
 
 
 // type notes = { Title : string, description : string, title : string }
@@ -10,10 +12,11 @@ export default function Notes(props: any) {
 
     const [pinnedNotes, setPinnedNote] = useState([{}])
     const [otherNotes, setOtherNote] = useState([{}])
-    const [note, setNotes] = useState([{}]);
     const user = firebase.auth().currentUser;
     const userId = user?.uid;
     const db = firebase.firestore();
+
+    const dbSql = SQLite.openDatabase('myDatabase.db', '1.0', '', 1);
 
     const getNotes = async () => {
         try {
@@ -50,7 +53,62 @@ export default function Notes(props: any) {
 
     useEffect(() => {
         getNotes();
-    }, [props.isModalOpenForCreateNote])
+        // Create table on component mount
+        dbSql.transaction((tx) => {
+            tx.executeSql(
+                'CREATE TABLE IF NOT EXISTS Notes (id INTEGER PRIMARY KEY, title TEXT, description TEXT)',
+                [],
+                () => {
+                    console.log('Table created');
+                },
+                (error) => {
+                    console.error('Error creating table:', error);
+                    return false;
+                }
+            );
+        });
+        addNote();
+        getNotesSql();
+    }, [props.isModalOpenForCreateNote]);
+
+    const addNote = async () => {
+        console.log('first')
+        dbSql.transaction((tx: any) => {
+            tx.executeSql(
+                'INSERT INTO Notes (title, description) VALUES (?, ?)',
+                ['Sample Title', 'Sample Description'],
+                (tx: any, results: any) => {
+                    console.log('Note inserted successfully:', results);
+                },
+                (error: any) => {
+                    console.error('Error inserting note:', error);
+                }
+            );
+        });
+    };
+
+
+    const getNotesSql = async () => {
+        // Ensure the database is opened
+        console.log('first')
+        dbSql.transaction((tx: any) => {
+            console.log('mid')
+            tx.executeSql(
+                'SELECT * FROM Notes',
+                [],
+                (tx: any, results: any) => {
+                    let notes = [];
+                    for (let i = 0; i < results.rows.length; i++) {
+                        notes.push(results.rows.item(i));
+                    }
+                    console.log('Notes fetched:', notes);
+                },
+                (error: any) => {
+                    console.error('Error fetching notes:', error);
+                }
+            );
+        });
+    };
 
     return (
         <View style={{ height: '84%' }}>
