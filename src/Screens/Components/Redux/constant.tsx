@@ -1,1 +1,0 @@
-export const LOGGED_IN = 'loggedIn'

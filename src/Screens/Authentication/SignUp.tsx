@@ -12,17 +12,8 @@ import { UserCredential } from "firebase/auth";
 function SignUp(props: any) {
 
     //State to manage userinputs and display errors.
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    let [password, setPassword] = useState('');
-    let [confirmPassword, setConfirmPassword] = useState('');
-    const [isEmailErrorForExisting, setEmailErrorForExisting] = useState(false)
-    const [isEmailErrorForInvalid, setEmailErrorForInvalid] = useState(false)
-    const [isEmailErrorForEmpty, setEmailErrorForEmpty] = useState(false)
-    const [isErrorForPassword, setErrorForPassword] = useState(false)
-    const [isErrorForEmptyPassword, setErrorForEmptyPassword] = useState(false)
-    const [isErrorForConfirmPassword, setErrorForConfirmPassword] = useState(false)
+    const [signUpData, setSignUpData] = useState({firstName:'',lastName:'',email:'',password:'',confirmPassword:''})
+    const [errors, setErrors] = useState({ isEmailErrorForExisting: false, isEmailErrorForInvalid: false, isEmailErrorForEmpty: false, isErrorForPassword: false, isErrorForEmptyPassword: false, isErrorForConfirmPassword: false })
     const [isLoading, setLoading] = useState(false)
     const [isChecked, setChecked] = useState(false);
 
@@ -32,17 +23,16 @@ function SignUp(props: any) {
 
         setLoading(true)
 
-        auth().createUserWithEmailAndPassword(email, password).then((UserCredential) => {
+        auth().createUserWithEmailAndPassword(signUpData.email, signUpData.password).then((UserCredential) => {
             //After successfull signUp this code will navigate to login screen.
-            setEmail('');
-            setPassword('')
+            setSignUpData({...signUpData,email:'',password:''})
             props.navigation.navigate("Login")
             ToastAndroid.show("Account Created!", ToastAndroid.SHORT);
 
             const user = UserCredential.user;
 
             user.updateProfile(
-                { displayName: `${firstName} ${lastName}` }
+                { displayName: `${signUpData.firstName} ${signUpData.lastName}` }
             ).catch((error) => {
                 console.log('====================================');
                 console.log(error);
@@ -59,13 +49,13 @@ function SignUp(props: any) {
 
             //Code to show errors.
             if (error.code === 'auth/email-already-in-use') {
-                setEmailErrorForExisting(true);
+                setErrors({ ...errors, isEmailErrorForExisting: true })
             }
             if (error.code === 'auth/invalid-email') {
-                setEmailErrorForInvalid(true);
+                setErrors({ ...error, isEmailErrorForInvalid: true })
             }
             if (error.code === 'auth/weak-password') {
-                setErrorForPassword(true);
+                setErrors({ ...errors, isErrorForPassword: false })
             }
             setLoading(false)
 
@@ -82,75 +72,74 @@ function SignUp(props: any) {
                     <Text style={[style.mediumText, style.text]}>Registration</Text>
 
                     {/* Input for First Name.*/}
-                    <TextInput style={style.signUpTextInput} label="First name" value={firstName} mode="outlined" onChangeText={(value) => {
-                        setFirstName(value);
+                    <TextInput style={style.signUpTextInput} label="First name" value={signUpData.firstName} mode="outlined" onChangeText={(value) => {
+                        setSignUpData({...signUpData, firstName: value})
                     }} />
                     {/* Input for Last name.*/}
-                    <TextInput style={style.signUpTextInput} label="Last Name" value={lastName} mode="outlined" onChangeText={(value) => {
-                        setLastName(value);
+                    <TextInput style={style.signUpTextInput} label="Last Name" value={signUpData.lastName} mode="outlined" onChangeText={(value) => {
+                        setSignUpData({...signUpData, lastName: value})
                     }} />
                     {/* Input for Email.*/}
-                    <TextInput style={style.signUpTextInput} label="Email" value={email} mode="outlined" onChangeText={(value) => {
-                        setEmail(value);
-                        setEmailErrorForExisting(false);
-                        setEmailErrorForEmpty(false)
-                        setEmailErrorForInvalid(false)
+                    <TextInput style={style.signUpTextInput} label="Email" value={signUpData.email} mode="outlined" onChangeText={(value) => {
+                        setSignUpData({...signUpData, email: value})
+                        setErrors({ ...errors, isEmailErrorForExisting: false, isEmailErrorForEmpty: false, isEmailErrorForInvalid: false })
                     }} />
 
                     {/* Error for existing email.*/}
                     {
-                        isEmailErrorForExisting ?
+                        errors.isEmailErrorForExisting ?
                             <Text style={style.errorText}> Entered mail already exists</Text> : null
                     }
                     {
-                        isEmailErrorForEmpty ?
+                        errors.isEmailErrorForEmpty ?
                             <Text style={style.errorText}> Mail Id is mandatory. </Text> : null
                     }
 
                     {/* Error for invalid email.*/}
                     {
-                        isEmailErrorForInvalid ?
+                        errors.isEmailErrorForInvalid ?
                             <Text style={style.errorText}> Entered mail is not valid</Text> : null
                     }
 
                     {/* Input for Password.*/}
-                    <TextInput style={style.signUpTextInput} secureTextEntry={!isChecked} label="Password" value={password} mode="outlined" onChangeText={(value) => { setPassword(value); setErrorForPassword(false); setErrorForEmptyPassword(false) }} />
+                    <TextInput style={style.signUpTextInput} secureTextEntry={!isChecked} label="Password" value={signUpData.password} mode="outlined" onChangeText={(value) => { setSignUpData({...signUpData, password:value}); setErrors({ ...errors, isErrorForPassword: false, isErrorForEmptyPassword: false }) }} />
                     <View style={[style.setRow, { marginTop: 16 }]}>
 
-                        <Pressable style={[{ width: 20, borderWidth: 1, backgroundColor: isChecked ? '#2596be' : 'white' }]} onPress={() => {
+                        <Pressable style={[{ width: 200, flexDirection: 'row' }]} onPress={() => {
                             setChecked(!isChecked);
 
                         }}>
-                            <Text style={{ color: 'white', textAlign: 'center' }}>✓</Text>
+                            <Text style={{ width: 18, color: 'white', borderWidth: 1, textAlign: 'center', backgroundColor: isChecked ? '#2596be' : 'white' }}>✓</Text>
+                            <Text style={{ flex: 1 }}>  Show password</Text>
+
                         </Pressable>
-                        <Text style={{ flex: 1 }}>  Show password</Text>
                     </View>
 
                     {
-                        isErrorForEmptyPassword ?
+                        errors.isErrorForEmptyPassword ?
                             <Text style={style.errorText}> Enter password</Text> : null
                     }
 
                     {/* Comfirmation for Password.*/}
-                    <TextInput style={style.signUpTextInput} label="Comfirm Password" value={confirmPassword} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => {
-                        setConfirmPassword(value);
+                    <TextInput style={style.signUpTextInput} label="Comfirm Password" value={signUpData.confirmPassword} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => {
+                        setSignUpData({...signUpData, confirmPassword: value})
                     }} />
                     {/* Error for weak password.*/}
                     {
-                        isErrorForPassword ?
+                        errors.isErrorForPassword ?
                             <Text style={style.errorText}> Weak password entered</Text> : null
                     }
                     {
-                        isErrorForConfirmPassword ?
+                        errors.isErrorForConfirmPassword ?
                             <Text style={style.errorText}> Password doesn't match</Text> : null
                     }
 
                     {/* SignUp button.*/}
                     <Pressable onPress={() => {
-                        if (password !== confirmPassword) setErrorForConfirmPassword(true);
-                        else if (email === '' || password === '') {
-                            if (email === '') setEmailErrorForEmpty(true)
-                            if (password === '') setErrorForEmptyPassword(true)
+                        if (signUpData.password !== signUpData.confirmPassword) setErrors({ ...errors, isErrorForConfirmPassword: true })
+                        else if (signUpData.email === '' || signUpData.password === '') {
+                            if (signUpData.email === '') setErrors({ ...errors, isEmailErrorForEmpty: true })
+                            if (signUpData.password === '') setErrors({ ...errors, isErrorForEmptyPassword: true })
                         }
                         else onRegister();
                     }}

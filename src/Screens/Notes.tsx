@@ -8,55 +8,46 @@ import { firebase } from '@react-native-firebase/auth';
 // type notes = { Title : string, description : string, title : string }
 export default function Notes(props: any) {
 
-const [note, setNotes] = useState([{}]);
-const user = firebase.auth().currentUser;
-const userId = user?.uid;
-const db = firebase.firestore();
+    const [note, setNotes] = useState([{}]);
+    const user = firebase.auth().currentUser;
+    const userId = user?.uid;
+    const db = firebase.firestore();
 
-const getNotes = async () => {
-    try {
-        const notesSnapshot = await db.collection("users").doc(userId).collection("notes").get();
+    const getNotes = async () => {
+        try {
+            const notesSnapshot = await db.collection("users").doc(userId).collection("notes").get();
 
-        const notes = notesSnapshot.docs.map(doc => ({
-            Title: doc.id,
-            ...doc.data()
-        }));
+            const notes = notesSnapshot.docs.map(doc => ({
+                Title: doc.id,
+                ...doc.data()
+            }));
 
-        setNotes(notes)
+            setNotes(notes)
+        }
+        catch {
+            console.warn('Something went wrong');
+
+        }
     }
-    catch {
-        console.log('====================================');
-        console.log("hhh");
-        console.log('====================================');
-    }
-}
 
 
-// useEffect(()=>{
-// getNotes
-// console.log('====================================');
-// console.log(note);
-// console.log('====================================');
-// },[])
 
 
     const [onClickNote, setOnClickNote] = useState(false)
     const [index, setIndex] = useState(0);
-
-
     const isList: boolean = props.isList;
+
+    useEffect(() => {
+        getNotes();
+
+    })
+
     return (
         <View style={{ height: '84%' }}>
 
             {Note(index, onClickNote, setOnClickNote)}
             <Text style={style.smallText}>Pined</Text>
-            <Pressable onPress={() => {
-                getNotes();
-                console.log('====================================');
-                console.log(note);
-                console.log('===================================='); console.warn("pressed");
 
-            }}><Text>Get Data</Text></Pressable>
             <View style={[style.setRow, { flexWrap: 'wrap' }]}>
 
                 {note.map((item: any, index: any) =>
@@ -65,7 +56,7 @@ const getNotes = async () => {
                         setIndex(index);
                         console.warn(index);
                         setOnClickNote(true);
-                        
+
                     }} style={[isList ? style.noteStyleList : style.noteStyleGrid, style.border]}>
 
                         <Text style={style.mediumText}>{item.Title}</Text>

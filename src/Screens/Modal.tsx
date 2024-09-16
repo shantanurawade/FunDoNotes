@@ -50,9 +50,6 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
                     <View style={[style.setRow, { height: '32%', justifyContent: 'space-between', borderWidth: 1 }]}>
                         <Pressable onPress={() => {
                             saveNote(Title, Discription);
-                            console.log('====================================');
-                            console.log('save');
-                            console.log('====================================');
                             setModalForCreateNote(false);
                             setDiscription('');
                             setTitle('');

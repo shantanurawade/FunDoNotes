@@ -6,7 +6,7 @@ import SignUp from './SignUp';
 //Stack varible which used to store and use "createNativeStackNavigator".
 const Stack = createNativeStackNavigator();
 
-export default function Authetication(props : any) {
+export default function Authetication() {
 
     return (
 

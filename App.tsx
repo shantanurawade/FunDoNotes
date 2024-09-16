@@ -5,6 +5,9 @@ import AutheticationScreen from './src/Screens/Authentication/AuthenticationScre
 import MainScreen from './src/Screens/MainScreen';
 import { initializeApp } from "firebase/app";
 import firebase from '@react-native-firebase/app';
+import { Provider } from 'react-redux';
+// import store from './src/Redux/store';
+
 
 
 
@@ -33,9 +36,10 @@ function App() {
   },[])
   return (
 
-    //Used to store navigation, should be only one in the project. 
+    
     <NavigationContainer>
 
+    
       {/* Defining navigation as a stack navigation */}
       <Stack.Navigator>
 
