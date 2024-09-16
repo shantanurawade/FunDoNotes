@@ -56,7 +56,7 @@ export function Home(props: any) {
                         </Pressable>
                     </View>
 
-                    <Notes isList={isGrid} />
+                    <Notes isList={isGrid} isModalOpenForCreateNote={isModalOpenForCreateNote}/>
 
                 </View >
             </ScrollView >

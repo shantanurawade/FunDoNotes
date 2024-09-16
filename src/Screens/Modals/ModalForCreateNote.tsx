@@ -5,7 +5,7 @@ import auth from '@react-native-firebase/auth'
 import { useState } from 'react';
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
-const saveNote = async (title: string, description: string) => {
+const saveNote = async (title: string, description: string, pinned : boolean) => {
 
     const currentDate: string = Date.now().toString();
     const db = getFirestore();
@@ -17,6 +17,7 @@ const saveNote = async (title: string, description: string) => {
             await setDoc(doc(db, "users", uid.uid, "notes", currentDate), {
                 title: title,
                 description: description,
+                pinned : pinned
             });
             console.log("Note saved successfully!");
         }
@@ -30,6 +31,7 @@ const saveNote = async (title: string, description: string) => {
 export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalForCreateNote: any) {
     const [Title, setTitle] = useState('');
     const [Discription, setDiscription] = useState('');
+    const [pinned, setPinned] = useState(false);
 
     return (
         <Modal visible={isModalOpenForCreateNote} animationType='slide' >
@@ -40,15 +42,18 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
                     <View style={[style.setRow, style.createNoteNavigationPanel]}>
                         <Pressable onPress={() => {
 
-                            if (Title !== '' || Discription !== '') { saveNote(Title, Discription); }
+                            if (Title !== '' || Discription !== '') { saveNote(Title, Discription,pinned); }
                             setModalForCreateNote(false);
                             setDiscription('');
+                            setPinned(false);
                             setTitle('');
                         }}>
                             <Text style={{ fontSize: 50 }}>{'<'} </Text>
                         </Pressable>
                         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                            <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>🖇️</Text></Pressable>
+                            <Pressable onPress={()=>{
+                                setPinned(true)
+                            }} ><Text style={{ fontSize: 28, padding: 5, backgroundColor: pinned? 'black': 'white' }}>🖇️</Text></Pressable>
                             <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>🔔</Text></Pressable>
                             <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>📩</Text></Pressable>
                         </View>

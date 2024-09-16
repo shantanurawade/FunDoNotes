@@ -8,6 +8,8 @@ import { firebase } from '@react-native-firebase/auth';
 // type notes = { Title : string, description : string, title : string }
 export default function Notes(props: any) {
 
+    const [pinnedNotes, setPinnedNote] = useState([{}])
+    const [otherNotes, setOtherNote] = useState([{}])
     const [note, setNotes] = useState([{}]);
     const user = firebase.auth().currentUser;
     const userId = user?.uid;
@@ -15,14 +17,25 @@ export default function Notes(props: any) {
 
     const getNotes = async () => {
         try {
-            const notesSnapshot = await db.collection("users").doc(userId).collection("notes").get();
 
-            const notes = notesSnapshot.docs.map(doc => ({
-                noteIndex : doc.id,
+            const notesSnapshotPinned = await db.collection("users").doc(userId).collection("notes").where("pinned", "==", true).get();
+            const notesSnapshotOther = await db.collection("users").doc(userId).collection("notes").where("pinned", "==", false).get();
+
+            const notesOther = notesSnapshotOther.docs.map(doc => ({
+
+                noteIndex: doc.id,
                 ...doc.data()
+
+            }));
+            const notesPinned = notesSnapshotPinned.docs.map(doc => ({
+
+                noteIndex: doc.id,
+                ...doc.data()
+
             }));
 
-            setNotes(notes)
+            setPinnedNote(notesPinned)
+            setOtherNote(notesOther)
         }
         catch {
             console.warn('Something went wrong');
@@ -30,14 +43,14 @@ export default function Notes(props: any) {
         }
     }
 
+
     const [onClickNote, setOnClickNote] = useState(false)
     const [index, setIndex] = useState(0);
     const isList: boolean = props.isList;
 
     useEffect(() => {
         getNotes();
-
-    })
+    }, [props.isModalOpenForCreateNote])
 
     return (
         <View style={{ height: '84%' }}>
@@ -47,11 +60,11 @@ export default function Notes(props: any) {
 
             <View style={[style.setRow, { flexWrap: 'wrap' }]}>
 
-                {note.map((item: any) =>
+                {pinnedNotes.map((item: any) =>
 
                     <Pressable key={item.noteIndex} onPress={() => {
                         setIndex(item.noteIndex);
-                        console.warn(index);
+                        console.warn(item.noteIndex);
                         setOnClickNote(true);
 
                     }} style={[isList ? style.noteStyleList : style.noteStyleGrid, style.border]}>
@@ -68,14 +81,21 @@ export default function Notes(props: any) {
 
             <View style={[style.setRow, { flexWrap: 'wrap', marginBottom: 12 }]}>
 
-                {/* {notePined?.map((item: any, index: number) =>
-                    <View style={[isList ? style.noteStyleList : style.noteStyleGrid, style.border]}>
 
-                        <Text key={index} style={style.mediumText}>{item.Title}</Text>
-                        <Text key={index} style={style.discription} numberOfLines={5}>{item.Discription}</Text>
-                    </View>
-                )} */}
+                {otherNotes.map((item: any) =>
 
+                    <Pressable key={item.noteIndex} onPress={() => {
+                        setIndex(item.noteIndex);
+                        console.warn(index);
+                        setOnClickNote(true);
+
+                    }} style={[isList ? style.noteStyleList : style.noteStyleGrid, style.border]}>
+                        <Text numberOfLines={5}>
+                            <Text style={style.mediumText}>{item.title}{'\n'}</Text>
+                            <Text style={style.discription} >{item.description}</Text>
+                        </Text>
+                    </Pressable>
+                )}
             </View>
 
         </View >
