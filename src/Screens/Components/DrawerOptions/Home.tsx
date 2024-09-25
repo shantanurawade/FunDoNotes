@@ -1,10 +1,9 @@
 import { Text, View, Pressable, TextInput, Image, ScrollView } from 'react-native';
 import { style } from '../../Components/style';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { OpenModalForLogout, OpenModalForCreateNote } from '../../Modals/index';
-import Notes from '../../Notes';
-
+import Notes from '../../Notes/Notes';
 
 export function Home(props: any) {
 

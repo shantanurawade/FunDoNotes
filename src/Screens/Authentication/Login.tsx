@@ -1,10 +1,13 @@
 import { View, Text, Pressable, Image, KeyboardAvoidingView, ScrollView, ActivityIndicator } from "react-native";
 import { style } from "../Components/style";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useDebugValue, useState } from "react";
 import auth from '@react-native-firebase/auth';
 import { TextInput } from "react-native-paper";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import LinearGradient from "react-native-linear-gradient";
+import LoginUsingEmail from "./LoginUsingEmail";
+import LoginUsingPhone from "./LoginUsingPhone";
 // import { getUserSuccess, getUserRequest, getUserError } from "../../Redux/action";
 
 
@@ -26,8 +29,10 @@ async function onGoogleButtonPress() {
 
 
 function Login(props: any) {
+    
     //State to manage userinputs and display errors. 
     const [userCredential, setUserCredential] = useState({ email: '', password: '' })
+    const [isPhoneLogIn, setPhoneLogin] = useState(false);
     const [isChecked, setChecked] = useState(false);
     const [error, setError] = useState({ isInvalidEmail: false, isPasswordError: false, isNetworkError: false, isSomethingWentWrong: false })
 
@@ -64,7 +69,8 @@ function Login(props: any) {
             }
             if (getError.code === 'auth/network-request-failed') {
                 setError({ ...error, isNetworkError: true });
-        
+                console.log(getError);
+                
             }
             if (getError.code === 'auth/invalid-email') {
                 setError({ ...error, isInvalidEmail: true });
@@ -92,87 +98,64 @@ function Login(props: any) {
 
     return (
 
-        //UI for login.
-        <SafeAreaView style={[style.container]}>
+        <LinearGradient colors={['orange', 'white', 'red']}
+            end={{ x: 0, y: 0 }}
+            start={{ x: 1, y: 1 }}
+            locations={[0, 0.5, 1]}
+            useAngle={true}
+            angle={145}
+            angleCenter={{ x: 0.6, y: 0.5 }}>
+            {/* //UI for login. */}
+            <SafeAreaView style={[style.container]}>
 
-            <View style={style.setMargin}>
-                <KeyboardAvoidingView>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={[style.setMargin]}>
+                    <KeyboardAvoidingView>
+                        <ScrollView showsVerticalScrollIndicator={false}>
 
-                        <Text style={[style.text, style.mediumText, style.setMargin]}>Login</Text>
+                            <Text style={[style.text, style.mediumText, style.setMargin]}>Login</Text>
 
-                        {/* Input for Email.*/}
-                        <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Email" value={userCredential.email} mode="outlined" onChangeText={(value) => { setUserCredential({ ...userCredential, email: value }); setError({ ...error, isInvalidEmail: false }) }}></TextInput>
+                            {
+                                isPhoneLogIn?
+                                <LoginUsingPhone setPhoneLogin={setPhoneLogin}/>:
+                            <LoginUsingEmail error={error} userCredential={userCredential} setUserCredential={setUserCredential} setError ={setError} isChecked={isChecked} setChecked={setChecked} isActivityLoading={isActivityLoading} onLogin={onLogin} setActivityLoader={setActivityLoader} />
+                            
 
-                        {/* Error for invalid email.*/}
-                        {
-                            error.isInvalidEmail ?
-                                <Text style={{ color: 'red' }}> Entered mail is not valid</Text> : null
-                        }
-
-                        {/* Input for Password.*/}
-
-                        <TextInput style={{ marginTop: 10 }} label="Password" value={userCredential.password} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => { setUserCredential({ ...userCredential, password: value }); setError({ ...error, isPasswordError: false }) }} />
-                        <View style={[style.setRow, { marginTop: 16 }]}>
-
-                            <Pressable style={[{ width: 200, flexDirection: 'row' }]} onPress={() => {
-                                setChecked(!isChecked);
-
-                            }}>
-                                <Text style={{ width: 18, color: 'white', borderWidth: 1, textAlign: 'center', backgroundColor: isChecked ? '#2596be' : 'white' }}>✓</Text>
-                                <Text style={{ flex: 1 }}>  Show password</Text>
-
+                            }
+                            {/*SignUp option for new user.*/}
+                            <Pressable onPress={() => { props.navigation.navigate('SignUp') }}>
+                                <Text style={[style.text, style.smallText, style.setPadding, style.linkText]}>SignUp</Text>
                             </Pressable>
-                        </View>
 
-                        {/* Error for wrong credintials.*/}
-                        {
-                            error.isPasswordError ?
-                                <Text style={{ color: 'red' }}> Invalid credential</Text> : null
-                        }
-                        {
-                            error.isNetworkError ?
-                                <Text style={{ color: 'red' }}> Please check your network conectivity.</Text> : null
-                        }
-                        {
-                            error.isSomethingWentWrong ?
-                                <Text style={{ color: 'red' }}> Somthing went wrong please try again.</Text> : null
-                        }
+                            {/*Social media login options.*/}
+                            <View style={style.setRow}>
+                                <Text style={[style.smallText, style.setPadding, { color: 'black' }]}>Login with : </Text>
+                                <Pressable onPress={() => {
 
-                        {/* Login button.*/}
-                        <Pressable
-                            onPress={() => {
-                                if (userCredential.email != '' && userCredential.password != '') onLogin();
-                                else setError({ ...error, isPasswordError: true })
-                            }}
-                            style={[style.container, style.button, style.setMarginTop]}>
-                            {isActivityLoading ? <ActivityIndicator size='large' color='#00ff00' /> :
-                                <Text style={[style.text, style.smallText]}>Login</Text>}
-                        </Pressable>
+                                    onLoginWithGoogle();
+                                }}>
+                                    <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Google.png')} />
+                                </Pressable>
+                                <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Facebook.png')} />
+                                <Pressable onPress={() => {
+                                    setPhoneLogin(true);
+                                }}>
+                                    {
+                                        isPhoneLogIn ? null:
+                                        <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/phone.png')} />
+                                    }
+                                </Pressable>
+                            </View>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
+                </View>
 
-                        {/*SignUp option for new user.*/}
-                        <Pressable onPress={() => { props.navigation.navigate('SignUp') }}>
-                            <Text style={[style.text, style.smallText, style.setPadding, style.linkText]}>SignUp</Text>
-                        </Pressable>
+            </SafeAreaView >
+        </LinearGradient>
 
-                        {/*Social media login options.*/}
-                        <View style={style.setRow}>
-                            <Text style={[style.smallText, style.setPadding, { color: 'black' }]}>Login with : </Text>
-                            <Pressable onPress={() => {
-
-                                onLoginWithGoogle();
-                            }}>
-                                <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Google.png')} />
-                            </Pressable>
-                            <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Facebook.png')} />
-                        </View>
-                    </ScrollView>
-                </KeyboardAvoidingView>
-            </View>
-
-        </SafeAreaView >
     )
 }
+
+
 
 
 export default Login;

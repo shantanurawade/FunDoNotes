@@ -6,6 +6,7 @@ import auth, { } from '@react-native-firebase/auth';
 import { ActivityIndicator, TextInput } from "react-native-paper";
 import firestore from '@react-native-firebase/firestore';
 import { UserCredential } from "firebase/auth";
+import LinearGradient from "react-native-linear-gradient";
 
 
 
@@ -63,8 +64,8 @@ function SignUp(props: any) {
     }
 
     return (
-
-        //UI for signUp.
+        
+        //UI for signUp. 
         <SafeAreaView style={[style.container, style.setFlex1]}>
             <ScrollView>
                 <View style={style.setMargin}>

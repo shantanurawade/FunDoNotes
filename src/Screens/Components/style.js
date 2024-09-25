@@ -75,23 +75,23 @@ export const style = StyleSheet.create({
     },
     mediumText: {
         color: 'black',
-        fontSize: getResponsiveFontSize(28)
+        fontSize: getResponsiveFontSize(24)
     },
     discription: {
-        fontSize: getResponsiveFontSize(18),
+        fontSize: getResponsiveFontSize(14),
         color: 'grey'
     },
     smallText: {
         color: 'black',
-        fontSize: getResponsiveFontSize(18)
+        fontSize: getResponsiveFontSize(14)
     },
     xSmallText: {
         color: 'black',
-        fontSize: getResponsiveFontSize(10)
+        fontSize: getResponsiveFontSize(8)
     },
     xxSmallText: {
         color: 'black',
-        fontSize: getResponsiveFontSize(5)
+        fontSize: getResponsiveFontSize(3)
     },
     setFlex1: {
         flex: 1
