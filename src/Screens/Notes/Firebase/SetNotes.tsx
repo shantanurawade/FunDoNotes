@@ -15,6 +15,7 @@ export const saveNote = async (title: string, description: string, pinned: boole
                 pinned: pinned
             });
             console.log("Note saved successfully!");
+            
         }
         else console.warn("User Not Logged in");
     } catch (error) {

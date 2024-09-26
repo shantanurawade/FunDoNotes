@@ -1,18 +1,16 @@
-import { View, Text, Pressable, Image, KeyboardAvoidingView, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, Image, KeyboardAvoidingView, ScrollView } from "react-native";
 import { style } from "../Components/style";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDebugValue, useState } from "react";
+import { useState } from "react";
 import auth from '@react-native-firebase/auth';
-import { TextInput } from "react-native-paper";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import LinearGradient from "react-native-linear-gradient";
 import LoginUsingEmail from "./LoginUsingEmail";
 import LoginUsingPhone from "./LoginUsingPhone";
-// import { getUserSuccess, getUserRequest, getUserError } from "../../Redux/action";
 
 
 GoogleSignin.configure({
-    webClientId: '118005057864-8g61q.apps.googleusercontent.com',
+    webClientId: '799467742576-dr6mfrc2o8n8q5gd32l3ah8iiqj85kei.apps.googleusercontent.com'
 });
 
 async function onGoogleButtonPress() {
@@ -29,7 +27,7 @@ async function onGoogleButtonPress() {
 
 
 function Login(props: any) {
-    
+
     //State to manage userinputs and display errors. 
     const [userCredential, setUserCredential] = useState({ email: '', password: '' })
     const [isPhoneLogIn, setPhoneLogin] = useState(false);
@@ -52,8 +50,7 @@ function Login(props: any) {
 
             //After successfull signIn this code will navigate to mainscreen.
             props.navigation.navigate('MainScreen')
-            // setEmail('')
-            // setPassword('')
+            setUserCredential({ email: '', password: '' })
             setActivityLoader(false);
             setError({ isInvalidEmail: false, isPasswordError: false, isNetworkError: false, isSomethingWentWrong: false })
             const user = auth().currentUser;
@@ -70,14 +67,12 @@ function Login(props: any) {
             if (getError.code === 'auth/network-request-failed') {
                 setError({ ...error, isNetworkError: true });
                 console.log(getError);
-                
+
             }
             if (getError.code === 'auth/invalid-email') {
                 setError({ ...error, isInvalidEmail: true });
 
             }
-            // else setError({ ...error, isSomethingWentWrong: true })
-
 
         })
     }
@@ -98,13 +93,10 @@ function Login(props: any) {
 
     return (
 
-        <LinearGradient colors={['orange', 'white', 'red']}
-            end={{ x: 0, y: 0 }}
-            start={{ x: 1, y: 1 }}
-            locations={[0, 0.5, 1]}
-            useAngle={true}
-            angle={145}
-            angleCenter={{ x: 0.6, y: 0.5 }}>
+
+        <LinearGradient colors={['orange', 'white']}
+            end={{ x: 1, y: 1 }}
+            start={{ x: 0, y: 0 }}>
             {/* //UI for login. */}
             <SafeAreaView style={[style.container]}>
 
@@ -115,10 +107,11 @@ function Login(props: any) {
                             <Text style={[style.text, style.mediumText, style.setMargin]}>Login</Text>
 
                             {
-                                isPhoneLogIn?
-                                <LoginUsingPhone setPhoneLogin={setPhoneLogin}/>:
-                            <LoginUsingEmail error={error} userCredential={userCredential} setUserCredential={setUserCredential} setError ={setError} isChecked={isChecked} setChecked={setChecked} isActivityLoading={isActivityLoading} onLogin={onLogin} setActivityLoader={setActivityLoader} />
-                            
+                                // to handle login with phone.
+                                isPhoneLogIn ?
+                                    <LoginUsingPhone setPhoneLogin={setPhoneLogin} /> :
+                                    <LoginUsingEmail error={error} userCredential={userCredential} setUserCredential={setUserCredential} setError={setError} isChecked={isChecked} setChecked={setChecked} isActivityLoading={isActivityLoading} onLogin={onLogin} setActivityLoader={setActivityLoader} />
+
 
                             }
                             {/*SignUp option for new user.*/}
@@ -140,8 +133,8 @@ function Login(props: any) {
                                     setPhoneLogin(true);
                                 }}>
                                     {
-                                        isPhoneLogIn ? null:
-                                        <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/phone.png')} />
+                                        isPhoneLogIn ? null :
+                                            <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/phone.png')} />
                                     }
                                 </Pressable>
                             </View>
@@ -154,8 +147,6 @@ function Login(props: any) {
 
     )
 }
-
-
 
 
 export default Login;

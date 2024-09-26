@@ -55,18 +55,18 @@ export function Home(props: any) {
                         </Pressable>
                     </View>
 
-                    <Notes isList={isGrid} isModalOpenForCreateNote={isModalOpenForCreateNote}/>
+                    <Notes isList={isGrid} setModalForCreateNote={setModalForCreateNote} isModalOpenForCreateNote={isModalOpenForCreateNote} />
 
                 </View >
             </ScrollView >
-            <View style={{ height: '8%' }}>
+            {/* <View style={{ height: '8%' }}>
 
-                <View style={{ height: '100%', backgroundColor: 'grey', alignItems: 'flex-end', paddingBottom: 5 }}>
+                <View style={{ height: '100%',  alignItems: 'flex-end', paddingBottom: 5 }}>
 
                 </View>
-            </View>
+            </View> */}
             <Pressable onPress={() => setModalForCreateNote(true)} style={style.createButton}>
-                <Text style={[{ color: 'red', textAlign: 'center', fontSize:50 }]}>+</Text>
+                <Text style={[{ color: 'white', textAlign: 'center', fontSize: 50 }]}>+</Text>
             </Pressable>
         </SafeAreaView>
     )

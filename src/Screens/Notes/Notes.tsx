@@ -32,15 +32,12 @@ export default function Notes(props: any) {
     const [onClickNote, setOnClickNote] = useState(false)
     const [index, setIndex] = useState(0);
     const [currentNote, setCurrentNote] = useState<Note>()
-    const [noteId, setNoteId] = useState(0)
     const isList: boolean = props.isList;
 
     useEffect(() => {
 
         console.log('Enter');
-
         const fetchNotes = async () => {
-
             console.log('1');
 
             try {
@@ -124,10 +121,10 @@ export default function Notes(props: any) {
 
                 {pinnedNotes?.map((item: any) =>
 
-                    <Pressable key={item.noteIndex} onPress={() => {
+                    <Pressable key={item.noteIndex} onPress={async () => {
                         setIndex(item.noteIndex);
-                        setNoteId(item.noteIndex);
-                        setOnClickNote(true);
+                        const note = await getNotesById(item.noteIndex);
+                        setCurrentNote(note);                     setOnClickNote(true);
 
                     }} style={[isList ? style.noteStyleList : style.noteStyleGrid, style.border]}>
                         <Text numberOfLines={5}>

@@ -5,11 +5,10 @@ import { style } from '../Components/style';
 
 const LoginUsingPhone = (props: any) => {
 
-
-
     const [isOtp, setOtp] = useState(false)
     const [timer, setTimer] = useState(5)
     const [resend, setResend] = useState(false);
+    const [isDisabled, setDisable] = useState(true);
 
     useEffect(() => {
 
@@ -17,7 +16,7 @@ const LoginUsingPhone = (props: any) => {
             setTimeout(() => {
                 setTimer(timer - 1)
             }, 1000)
-        else setResend(true)
+        else {setResend(true); setDisable(false)}
     }, [timer])
     const setPhoneLogin = props.setPhoneLogin;
     return (
@@ -30,7 +29,7 @@ const LoginUsingPhone = (props: any) => {
                     <View>
                         <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Enter otp" mode="outlined" ></TextInput>
 
-                        <Pressable onPress={() => { setResend(false); setTimer(30) }}>
+                        <Pressable disabled={isDisabled}  onPress={() => { setResend(false); setDisable(true); setTimer(30) }}>
                             <Text style={{ textAlign: 'right', color: resend ? '#2596be' : 'grey' }}>Resend otp
                                 <Text> 00:{timer}</Text>
                             </Text>
@@ -61,4 +60,4 @@ const LoginUsingPhone = (props: any) => {
     )
 }
 
-export default LoginUsingPhone
+export default LoginUsingPhone;

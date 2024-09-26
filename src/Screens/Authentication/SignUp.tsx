@@ -5,9 +5,6 @@ import { useState } from "react";
 import auth, { } from '@react-native-firebase/auth';
 import { ActivityIndicator, TextInput } from "react-native-paper";
 import firestore from '@react-native-firebase/firestore';
-import { UserCredential } from "firebase/auth";
-import LinearGradient from "react-native-linear-gradient";
-
 
 
 function SignUp(props: any) {

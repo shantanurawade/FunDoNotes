@@ -19,7 +19,7 @@ export const style = StyleSheet.create({
     },
     createButton: {
         borderRadius: 40,
-        borderWidth: 5,
+        // borderWidth: 5,
         borderColor: 'white',
         backgroundColor: 'grey',
         width: width * 0.16,
