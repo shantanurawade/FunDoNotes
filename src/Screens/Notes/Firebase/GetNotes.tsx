@@ -8,6 +8,7 @@ const db = firebase.firestore();
 
 
 export const getNotes = async () => {
+
     try {
 
         const notesSnapshot = await db.collection("users").doc(userId).collection("notes").get();
@@ -20,6 +21,7 @@ export const getNotes = async () => {
 
         }));
 
+       
         return notes
     }
     catch {
@@ -38,12 +40,12 @@ export const getNotesById = async (ref: any) => {
         title: string;
     }
     console.log('111');
-    
+
     try {
 
         const notesSnapshot = await db.collection("users").doc(userId).collection("notes").doc(ref).get();
 
-        if(notesSnapshot){
+        if (notesSnapshot) {
             const noteData = notesSnapshot.data() as Note;
             return noteData
         }
@@ -54,7 +56,7 @@ export const getNotesById = async (ref: any) => {
         console.warn('Something went wrong');
 
     }
- console.log('fdf');
- 
+    console.log('fdf');
+
 
 }

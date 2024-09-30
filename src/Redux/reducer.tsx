@@ -1,5 +1,5 @@
-import { startAfter } from "@react-native-firebase/firestore";
-import { GET_USER_SUCCESS, GET_USER_REQUEST, GET_USER_ERROR } from "./constant";
+// import { startAfter } from "@react-native-firebase/firestore";
+// import { GET_USER_SUCCESS, GET_USER_REQUEST, GET_USER_ERROR } from "./constant";
 // import { OPEN_NOTES } from "./constant";
 
 // const initialState = Item;

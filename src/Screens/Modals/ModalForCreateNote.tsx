@@ -3,7 +3,7 @@ import { style } from '../Components/style';
 import { useState } from 'react';
 import { saveNote } from '../Notes/Firebase/SetNotes';
 
-export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalForCreateNote: any) {
+export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalForCreateNote: any, setSaved: any) {
     const [Title, setTitle] = useState('');
     const [Discription, setDiscription] = useState('');
     const [pinned, setPinned] = useState(false);
@@ -16,7 +16,7 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
                     <View style={[style.setRow, style.createNoteNavigationPanel,{height:'40%'}]}>
                         <Pressable onPress={() => {
 
-                            if (Title !== '' || Discription !== '') { saveNote(Title, Discription, pinned); }
+                            if (Title !== '' || Discription !== '') { saveNote(Title, Discription, pinned, setSaved); }
                             setModalForCreateNote(false);
                             setDiscription('');
                             setPinned(false);
@@ -36,10 +36,11 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
 
 
                     <TextInput placeholder='Title' value={Title} multiline
-                        onChangeText={(value) => setTitle(value)} style={{ width: '100%', height:'40%', fontSize: 35 }} />
+                        onChangeText={(value) => setTitle(value)} style={[style.largeText, { width: '100%' }]} />
 
                     <TextInput multiline={true} placeholder='Discription' value={Discription}
-                        onChangeText={(value) => setDiscription(value)} style={[style.discription, { height: '500%', borderWidth: 1, width: '100%', fontSize: 25 }]} />
+                        onChangeText={(value) => setDiscription(value)} style={[style.discription, { height: '500%',  width: '100%', fontSize: 25 }]} />
+
                 </ScrollView>
 
             </KeyboardAvoidingView>

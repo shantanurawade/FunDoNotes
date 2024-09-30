@@ -6,7 +6,6 @@ import MainScreen from './src/Screens/MainScreen';
 import { initializeApp } from "firebase/app";
 import firebase from '@react-native-firebase/app';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { Provider } from 'react-redux';
 // import store from './src/Redux/store';
 
 

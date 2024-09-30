@@ -10,15 +10,16 @@ export function Home(props: any) {
     const [isGrid, setGrid] = useState(false);
     const [isModalOpenForLogout, setModalForLogout] = useState(false)
     const [isModalOpenForCreateNote, setModalForCreateNote] = useState(false)
+    const [saved, setSaved] = useState(false)
 
     return (
 
         <SafeAreaView style={{ flex: 1 }}>
 
             {OpenModalForLogout(isModalOpenForLogout, setModalForLogout, props)}
-            {OpenModalForCreateNote(isModalOpenForCreateNote, setModalForCreateNote)}
+            {OpenModalForCreateNote(isModalOpenForCreateNote, setModalForCreateNote, setSaved)}
 
-            <ScrollView style={{ flex: 1 }} >
+            {/* <ScrollView style={{ flex: 1 }} > */}
 
                 <View style={[style.mainHome]} >
                     <View style={style.searchBar}>
@@ -55,16 +56,10 @@ export function Home(props: any) {
                         </Pressable>
                     </View>
 
-                    <Notes isList={isGrid} setModalForCreateNote={setModalForCreateNote} isModalOpenForCreateNote={isModalOpenForCreateNote} />
+                    <Notes saved={saved} setSaved={setSaved} isList={isGrid} setModalForCreateNote={setModalForCreateNote} isModalOpenForCreateNote={isModalOpenForCreateNote} />
 
                 </View >
-            </ScrollView >
-            {/* <View style={{ height: '8%' }}>
-
-                <View style={{ height: '100%',  alignItems: 'flex-end', paddingBottom: 5 }}>
-
-                </View>
-            </View> */}
+            {/* </ScrollView > */}
             <Pressable onPress={() => setModalForCreateNote(true)} style={style.createButton}>
                 <Text style={[{ color: 'white', textAlign: 'center', fontSize: 50 }]}>+</Text>
             </Pressable>

@@ -14,8 +14,7 @@ export const style = StyleSheet.create({
     },
     createNoteNavigationPanel: {
         height: height * 0.08,
-        justifyContent: 'space-between',
-        borderWidth: 1
+        justifyContent: 'space-between'
     },
     createButton: {
         borderRadius: 40,
@@ -71,15 +70,16 @@ export const style = StyleSheet.create({
     },
     largeText: {
         color: 'black',
-        fontSize: getResponsiveFontSize(45)
+        fontSize: getResponsiveFontSize(40)
     },
     mediumText: {
         color: 'black',
         fontSize: getResponsiveFontSize(24)
     },
     discription: {
-        fontSize: getResponsiveFontSize(14),
-        color: 'grey'
+        textAlignVertical: 'top',
+        fontSize: getResponsiveFontSize(18),
+        color: '#817E7D'
     },
     smallText: {
         color: 'black',
