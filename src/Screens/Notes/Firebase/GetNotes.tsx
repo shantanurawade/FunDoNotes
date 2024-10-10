@@ -1,10 +1,17 @@
 import { firebase } from "@react-native-firebase/auth";
+import { setData } from "../../../SQLite/db";
 
 
 const user = firebase.auth().currentUser;
 const userId = user?.uid;
 const db = firebase.firestore();
-
+interface Note {
+    description: string;
+    noteIndex: string;
+    pinned: number;
+    recycled: number;
+    title: string;
+}
 
 
 export const getNotes = async () => {
@@ -15,13 +22,20 @@ export const getNotes = async () => {
 
         const notes = notesSnapshot.docs.map(doc => ({
             noteIndex: doc.id,
-            description: doc.data().description || '',  // Ensure description is always present
-            pinned: doc.data().pinned || false,        // Ensure pinned is always present
+            description: doc.data().description || '',
+            pinned: doc.data().pinned || 0,
+            recycled: doc.data().recycled || 0,
             title: doc.data().title || ''
-
         }));
 
-       
+        notes.forEach(async (note) => {
+            await setData(note.noteIndex, note.title, note.description, note.pinned);
+            console.log('====================================');
+            console.log(note.noteIndex);
+            console.log('====================================');
+        });
+
+
         return notes
     }
     catch {
@@ -33,18 +47,13 @@ export const getNotes = async () => {
 
 export const getNotesById = async (ref: any) => {
 
-    interface Note {
-        description: string;
-        noteIndex: string;
-        pinned: boolean;
-        title: string;
-    }
-    console.log('111');
-
     try {
 
         const notesSnapshot = await db.collection("users").doc(userId).collection("notes").doc(ref).get();
 
+        console.log('====================================');
+        console.log(notesSnapshot);
+        console.log('====================================');
         if (notesSnapshot) {
             const noteData = notesSnapshot.data() as Note;
             return noteData
@@ -57,6 +66,5 @@ export const getNotesById = async (ref: any) => {
 
     }
     console.log('fdf');
-
 
 }

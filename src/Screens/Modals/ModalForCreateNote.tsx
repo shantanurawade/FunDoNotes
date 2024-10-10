@@ -2,11 +2,15 @@ import { Text, View, Pressable, Modal, KeyboardAvoidingView, ScrollView, TextInp
 import { style } from '../Components/style';
 import { useState } from 'react';
 import { saveNote } from '../Notes/Firebase/SetNotes';
+import { useDispatch } from 'react-redux';
+// import { appDispatch } from '../../Redux/store';
+// import { saveData } from '../../Redux/dispathcer';
 
 export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalForCreateNote: any, setSaved: any) {
     const [Title, setTitle] = useState('');
     const [Discription, setDiscription] = useState('');
-    const [pinned, setPinned] = useState(false);
+    const [pinned, setPinned] = useState(0);
+    // const dispatch = useDispatch<appDispatch>()
 
     return (
         <Modal visible={isModalOpenForCreateNote} animationType='slide' >
@@ -17,16 +21,17 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
                         <Pressable onPress={() => {
 
                             if (Title !== '' || Discription !== '') { saveNote(Title, Discription, pinned, setSaved); }
+                            // dispatch(saveData())
                             setModalForCreateNote(false);
                             setDiscription('');
-                            setPinned(false);
+                            setPinned(0);
                             setTitle('');
                         }}>
                             <Text style={{ fontSize: 50 }}>{'<'} </Text>
                         </Pressable>
                         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                             <Pressable onPress={() => {
-                                setPinned(true)
+                                setPinned(1)
                             }} ><Text style={{ fontSize: 28, padding: 5, backgroundColor: pinned ? 'black' : 'white' }}>🖇️</Text></Pressable>
                             <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>🔔</Text></Pressable>
                             <Pressable ><Text style={{ fontSize: 28, padding: 5 }}>📩</Text></Pressable>

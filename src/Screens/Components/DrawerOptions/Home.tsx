@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { OpenModalForLogout, OpenModalForCreateNote } from '../../Modals/index';
 import Notes from '../../Notes/Notes';
 
+
 export function Home(props: any) {
 
     const [isGrid, setGrid] = useState(false);
@@ -63,6 +64,9 @@ export function Home(props: any) {
             <Pressable onPress={() => setModalForCreateNote(true)} style={style.createButton}>
                 <Text style={[{ color: 'white', textAlign: 'center', fontSize: 50 }]}>+</Text>
             </Pressable>
+            {/* <Pressable onPress={() => sqlite()  } style={style.createButton}>
+                <Text style={[{ color: 'white', textAlign: 'center', fontSize: 50 }]}>+</Text> */}
+            {/* </Pressable> */}
         </SafeAreaView>
     )
 }

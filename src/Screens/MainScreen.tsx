@@ -4,14 +4,15 @@ import { Option } from "./Components/DrawerOptions/Option"
 import Reminders from "./Components/DrawerOptions/Reminders";
 import Archive from "./Components/DrawerOptions/Archive";
 import Bin from "./Components/DrawerOptions/Bin";
-import { NavigationContainer } from "@react-navigation/native";
-import Icon from 'react-native-vector-icons/FontAwesome5';
-const Drawer = createDrawerNavigator();
 
+
+const Drawer = createDrawerNavigator();
 function MainScreen(props: any) {
 
 
     return (
+
+        // <MyContext.Provider value={saved}>
         <Drawer.Navigator initialRouteName="Home"
             screenOptions={{
                 drawerStyle: {
@@ -41,6 +42,7 @@ function MainScreen(props: any) {
             <Drawer.Screen name="Bin" component={Bin}></Drawer.Screen>
 
         </Drawer.Navigator>
+        
     )
 }
 

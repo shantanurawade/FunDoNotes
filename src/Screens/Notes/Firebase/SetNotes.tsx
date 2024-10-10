@@ -1,24 +1,37 @@
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, DocumentReference, DocumentData } from "firebase/firestore";
 import auth from '@react-native-firebase/auth'
-import { createContext } from "react";
+import { updateDoc } from "@react-native-firebase/firestore";
+// import { savedNotes } from "../../../Redux/action";
+import { useDispatch } from "react-redux";
+// import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
+const db = getFirestore();
+const uid = auth().currentUser;
+
+// const dispatch = useDispatch();
 
 
-export const saveNote = async (title: string, description: string, pinned: boolean, setSaved: any) => {
+const  handleSavedNotes =(item: any)=>{
+    console.log('====================================');
+    console.log("saved");
+    console.log('====================================');
+    // dispatch(savedNotes(item))
+}
+
+export const saveNote = async (title: string, description: string, pinned: number, setSaved: any) => {
 
     const currentDate: string = Date.now().toString();
-    const db = getFirestore();
-    const uid = auth().currentUser;
 
     try {
         if (uid) {
             await setDoc(doc(db, "users", uid.uid, "notes", currentDate), {
                 title: title,
                 description: description,
-                pinned: pinned
+                pinned: pinned,
+                recycled: 0
             });
             console.log("Note saved successfully!");
             setSaved(true);
-            
+            // handleSavedNotes();
         }
         else console.warn("User Not Logged in");
     } catch (error) {
@@ -28,11 +41,11 @@ export const saveNote = async (title: string, description: string, pinned: boole
 
 
 
-export const updateNote = async (title: string, description: string, pinned: boolean, noteId: any, setSaved:any) => {
+
+
+export const updateNote = async (title: string, description: string, pinned: number, recycled: number, noteId: any, setSaved: any) => {
 
     // const currentDate: string = Date.now().toString();
-    const db = getFirestore();
-    const uid = auth().currentUser;
 
     try {
 
@@ -41,18 +54,40 @@ export const updateNote = async (title: string, description: string, pinned: boo
         console.log("Title: ", title);
         console.log("Description: ", description);
         console.log("Pinned: ", pinned);
-    
+
         if (uid) {
             await setDoc(doc(db, "users", uid.uid, "notes", noteId), {
                 title: title,
                 description: description,
-                pinned: pinned
+                pinned: pinned,
+                recycled: recycled
             });
             console.log("Note saved successfully!");
-            setSaved(true)            
+            setSaved(true)
         }
         else console.warn("User Not Logged in");
     } catch (error) {
         console.log("Error saving note: ", error);
     }
 };
+
+export const recycle = async (noteId: string, recycled: number, setSaved: any) => {
+
+    try {
+        if (uid) {
+            const noteRef: any = doc(db, "users", uid.uid, "notes", noteId);
+
+
+            await updateDoc(noteRef, {
+                recycled: recycled
+            });
+        }
+    }
+    catch (error) {
+        console.log('====================================');
+        console.log(error);
+        console.log('====================================');
+    } finally {
+        setSaved(true)
+    }
+}

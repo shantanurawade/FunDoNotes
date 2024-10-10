@@ -2,8 +2,9 @@ import { View, Text, Pressable, ActivityIndicator } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import React from 'react'
 import { style } from '../Components/style';
+import { useForm } from '../../utility/util';
 
-const LoginUsingEmail = (props : any) => {
+const LoginUsingEmail = (props: any) => {
 
     const error = props.error;
     const userCredential = props.userCredential;
@@ -13,12 +14,24 @@ const LoginUsingEmail = (props : any) => {
     const setChecked = props.setChecked;
     const isActivityLoading = props.isActivityLoading;
     const onLogin = props.onLogin;
+    const { values, handleChange } = useForm({ email: '', password: '' })
 
     return (
 
         <View>
             {/* Input for Email.*/}
-            <TextInput style={{ marginTop: 10, marginBottom: 10 }} label="Email" value={userCredential.email} mode="outlined" onChangeText={(value) => { setUserCredential({ ...userCredential, email: value }); setError({ ...error, isInvalidEmail: false }) }}></TextInput>
+            <TextInput
+                style={{ marginTop: 10, marginBottom: 10 }}
+                label="Email"
+                value={values.email}
+                mode="outlined"
+                onChangeText={(text) => {
+                    // setUserCredential({ ...userCredential, email: value });
+                    handleChange("email", text)
+                    setError({ ...error, isInvalidEmail: false })
+                }}>
+
+            </TextInput>
 
             {/* Error for invalid email.*/}
             {
@@ -28,7 +41,17 @@ const LoginUsingEmail = (props : any) => {
 
             {/* Input for Password.*/}
 
-            <TextInput style={{ marginTop: 10 }} label="Password" value={userCredential.password} secureTextEntry={!isChecked} mode="outlined" onChangeText={(value) => { setUserCredential({ ...userCredential, password: value }); setError({ ...error, isPasswordError: false }) }} />
+            <TextInput
+                style={{ marginTop: 10 }}
+                label="Password"
+                value={values.password}
+                secureTextEntry={!isChecked}
+                mode="outlined"
+                onChangeText={(text) => {
+                    handleChange("password", text);  
+                    // setUserCredential({ ...userCredential, password: value });
+                    setError({ ...error, isPasswordError: false })
+                }} />
             <View style={[style.setRow, { marginTop: 16 }]}>
 
                 <Pressable style={[{ width: 200, flexDirection: 'row' }]} onPress={() => {
@@ -58,7 +81,7 @@ const LoginUsingEmail = (props : any) => {
             {/* Login button.*/}
             <Pressable
                 onPress={() => {
-                    if (userCredential.email != '' && userCredential.password != '') onLogin();
+                    if (values.email != '' && values.password != '') onLogin(values.email, values.password);
                     else setError({ ...error, isPasswordError: true })
                 }}
                 style={[style.container, style.button, style.setMarginTop]}>
@@ -66,7 +89,7 @@ const LoginUsingEmail = (props : any) => {
                     <Text style={[style.text, style.smallText]}>Login</Text>}
             </Pressable>
 
-        </View>
+        </View >
 
     )
 }

@@ -30,16 +30,27 @@
 
 
 // import { SAVED_NOTE } from "./constant";
-// import { savedNotes } from "./action";
 
+// const initialState = { isNoteSaved: false, noteData: {} }
 
-// const initialState ={ savedNotes : false}
-
-// const reducer = (state = initialState, action: any)=>{
-//     switch(action.type){
+// export const noteReducer = (state = initialState, action: any) => {
+//     switch (action.type) {
 //         case SAVED_NOTE:
+//             console.log("This is inside the reducer "+ action.data);
+            
 //             return {
-//                 savedNotes: true
+//                 ...state,
+//                 isNoteSaved : true,
+//                 noteData : action.data,
+
+//             }
+//         default:
+//             return {
+//                 ...state
 //             }
 //     }
 // }
+
+
+
+

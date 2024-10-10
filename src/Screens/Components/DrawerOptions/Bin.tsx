@@ -1,10 +1,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import { BinNotes } from '../../Notes/Notes'
 
 const Bin = () => {
   return (
     <View>
-      <Text>Bin</Text>
+      <BinNotes />
     </View>
   )
 }

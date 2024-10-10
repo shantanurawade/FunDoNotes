@@ -38,15 +38,10 @@ function Login(props: any) {
     // const isLoading = useSelector((state: any) => state.reducer.isLoading)
 
     //Function for handleing firebase signIn. 
-    const onLogin = () => {
+    const onLogin = (email: any, password: any) => {
 
         setActivityLoader(true);
-
-        // const dispatch = useDispatch()
-        // // dispatch({type : GET_USER_REQUEST});
-        // dispatch(getUserRequest());
-
-        auth().signInWithEmailAndPassword(userCredential.email, userCredential.password).then(() => {
+        auth().signInWithEmailAndPassword(email, password).then(() => {
 
             //After successfull signIn this code will navigate to mainscreen.
             props.navigation.navigate('MainScreen')
@@ -62,18 +57,14 @@ function Login(props: any) {
             //Code to show errors.
             if (getError.code === 'auth/invalid-credential') {
                 setError({ ...error, isPasswordError: true });
-
             }
             if (getError.code === 'auth/network-request-failed') {
                 setError({ ...error, isNetworkError: true });
                 console.log(getError);
-
             }
             if (getError.code === 'auth/invalid-email') {
                 setError({ ...error, isInvalidEmail: true });
-
             }
-
         })
     }
     const onLoginWithGoogle = () => {
@@ -99,7 +90,6 @@ function Login(props: any) {
             start={{ x: 0, y: 0 }}>
             {/* //UI for login. */}
             <SafeAreaView style={[style.container]}>
-
                 <View style={[style.setMargin]}>
                     <KeyboardAvoidingView>
                         <ScrollView showsVerticalScrollIndicator={false}>
@@ -141,10 +131,8 @@ function Login(props: any) {
                         </ScrollView>
                     </KeyboardAvoidingView>
                 </View>
-
             </SafeAreaView >
         </LinearGradient>
-
     )
 }
 
