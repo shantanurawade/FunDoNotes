@@ -1,10 +1,8 @@
 import { View, Pressable, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { TextInput } from 'react-native-paper';
-import { style } from '../Components/style';
+import { style } from "../../Styles/style";
 import auth from '@react-native-firebase/auth';
-
-
 
 
 const LoginUsingPhone = (props: any) => {

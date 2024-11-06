@@ -1,45 +1,31 @@
-import { View, Text, Pressable, Image, KeyboardAvoidingView, ScrollView } from "react-native";
-import { style } from "../Components/style";
+import { View, Text, Pressable, Image, KeyboardAvoidingView, ScrollView, Switch } from "react-native";
+import { style } from "../../Styles/style";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import LinearGradient from "react-native-linear-gradient";
 import LoginUsingEmail from "./LoginUsingEmail";
 import LoginUsingPhone from "./LoginUsingPhone";
-
-
-GoogleSignin.configure({
-    webClientId: '799467742576-dr6mfrc2o8n8q5gd32l3ah8iiqj85kei.apps.googleusercontent.com'
-});
-
-async function onGoogleButtonPress() {
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-}
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../../Redux/action";
+import { RootState } from "../../Redux/store";
+import { onGoogleButtonPress, onLoginWithGoogle } from "./utils/onGoogleButtonPress";
 
 
 function Login(props: any) {
 
+    const isDarkTheme = useSelector((store: RootState) => store.themeState.isDarkTheme);
     //State to manage userinputs and display errors. 
-    const [userCredential, setUserCredential] = useState({ email: '', password: '' })
+    const [userCredential, setUserCredential] = useState({ email: '', password: '' });
     const [isPhoneLogIn, setPhoneLogin] = useState(false);
     const [isChecked, setChecked] = useState(false);
-    const [error, setError] = useState({ isInvalidEmail: false, isPasswordError: false, isNetworkError: false, isSomethingWentWrong: false })
+    const [error, setError] = useState({ isInvalidEmail: false, isPasswordError: false, isNetworkError: false, isSomethingWentWrong: false });
+    const [isActivityLoading, setActivityLoader] = useState(false);
+    const dispatch = useDispatch();
 
-    const [isActivityLoading, setActivityLoader] = useState(false)
-    // const isLoading = useSelector((state: any) => state.reducer.isLoading)
 
     //Function for handleing firebase signIn. 
     const onLogin = (email: any, password: any) => {
-
         setActivityLoader(true);
         auth().signInWithEmailAndPassword(email, password).then(() => {
 
@@ -67,33 +53,27 @@ function Login(props: any) {
             }
         })
     }
-    const onLoginWithGoogle = () => {
-        onGoogleButtonPress().then(
-            () => console.log('Signed in with Google!')).catch(
-                (error) => {
-                    console.log('====================================');
-                    console.log(error);
-                    console.log('====================================');
-                }).catch((error) => {
-                    console.log('====================================');
-                    console.log(error);
-                    console.log('====================================');
-                })
-
-    }
+   
 
     return (
 
-
-        <LinearGradient colors={['orange', 'white']}
-            end={{ x: 1, y: 1 }}
+        <LinearGradient colors={['orange', isDarkTheme ? 'black' : 'white']}
+            end={{ x: .8, y: .8 }}
             start={{ x: 0, y: 0 }}>
             {/* //UI for login. */}
             <SafeAreaView style={[style.container]}>
                 <View style={[style.setMargin]}>
                     <KeyboardAvoidingView>
                         <ScrollView showsVerticalScrollIndicator={false}>
-
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text>Dark Mode -</Text>
+                                <Switch
+                                    style={{ alignSelf: 'flex-start' }}
+                                    value={isDarkTheme}
+                                    onValueChange={() => {
+                                        dispatch(toggleTheme());
+                                    }} />
+                            </View>
                             <Text style={[style.text, style.mediumText, style.setMargin]}>Login</Text>
 
                             {
@@ -101,8 +81,6 @@ function Login(props: any) {
                                 isPhoneLogIn ?
                                     <LoginUsingPhone setPhoneLogin={setPhoneLogin} /> :
                                     <LoginUsingEmail error={error} userCredential={userCredential} setUserCredential={setUserCredential} setError={setError} isChecked={isChecked} setChecked={setChecked} isActivityLoading={isActivityLoading} onLogin={onLogin} setActivityLoader={setActivityLoader} />
-
-
                             }
                             {/*SignUp option for new user.*/}
                             <Pressable onPress={() => { props.navigation.navigate('SignUp') }}>
@@ -111,7 +89,7 @@ function Login(props: any) {
 
                             {/*Social media login options.*/}
                             <View style={style.setRow}>
-                                <Text style={[style.smallText, style.setPadding, { color: 'black' }]}>Login with : </Text>
+                                <Text style={[style.smallText, style.setPadding, { color: isDarkTheme ? 'white' : 'black' }]}>Login with : </Text>
                                 <Pressable onPress={() => {
 
                                     onLoginWithGoogle();
@@ -119,6 +97,7 @@ function Login(props: any) {
                                     <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Google.png')} />
                                 </Pressable>
                                 <Image style={[style.profilePic, style.setSpacing]} source={require('../../Assets/Images/Facebook.png')} />
+
                                 <Pressable onPress={() => {
                                     setPhoneLogin(true);
                                 }}>

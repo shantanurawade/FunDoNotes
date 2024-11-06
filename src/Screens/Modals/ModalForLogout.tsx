@@ -1,5 +1,5 @@
 import { Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, ToastAndroid, Alert } from 'react-native';
-import { style } from '../Components/style';
+import { style } from "../../Styles/style";
 import auth from '@react-native-firebase/auth'
 import { useState } from 'react';
 
@@ -18,7 +18,8 @@ export function OpenModalForLogout(isModalOpen: any, setModalOpen: any, props: a
             [
                 {
                     text: "Yes", onPress: () => auth().signOut().then(() => {
-                        props.navigation.navigate('AuthenticationScreen')
+                        
+                        props.navigation.navigate('AuthenticationScreen');
                         ToastAndroid.show("Logged out!", ToastAndroid.SHORT);
                     })
                 },

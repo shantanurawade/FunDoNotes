@@ -6,9 +6,9 @@ import MainScreen from './src/Screens/MainScreen';
 import { initializeApp } from "firebase/app";
 import firebase from '@react-native-firebase/app';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { Provider } from 'react-redux';
+import { store } from './src/Redux/store';
 // import store from './src/Redux/store';
-
-
 
 
 // Firebase configuration (from `google-services.json`)
@@ -35,11 +35,13 @@ function App() {
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
+
     initializeApp(firebaseConfig)
     const subscriber = auth().onAuthStateChanged((getUser) => {
       setUser(getUser);
       if (initializing) setInitializing(false);
     });
+
     // Unsubscribe from listener when component unmounts
     return () => subscriber();
   }, [initializing]);
@@ -48,25 +50,26 @@ function App() {
 
   return (
 
+    <Provider store={store}>
+      <NavigationContainer>
 
-    <NavigationContainer>
+        {/* Defining navigation as a stack navigation */}
+        <Stack.Navigator>
 
+          {/* Screens to be displayed in navigation */}
+          {/* Name and components is the mandatory attributes*/}
 
-      {/* Defining navigation as a stack navigation */}
-      <Stack.Navigator>
+          {user ? (
+            <Stack.Screen name='MainScreen' component={MainScreen} options={{ headerShown: false }} />
+          ) : (
+            <Stack.Screen name='AuthenticationScreen' component={AutheticationScreen} options={{ headerShown: false }} />
+          )
+          }
+        </Stack.Navigator>
 
-        {/* Screens to be displayed in navigation */}
-        {/* Name and components is the mandatory attributes*/}
+      </NavigationContainer>
 
-        {user ? (
-          <Stack.Screen name='MainScreen' component={MainScreen} options={{ headerShown: false }} />
-        ) : (
-          <Stack.Screen name='AuthenticationScreen' component={AutheticationScreen} options={{ headerShown: false }} />
-        )
-        }
-      </Stack.Navigator>
-
-    </NavigationContainer>
+    </Provider>
   )
 }
 

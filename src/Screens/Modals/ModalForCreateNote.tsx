@@ -1,8 +1,9 @@
 import { Text, View, Pressable, Modal, KeyboardAvoidingView, ScrollView, TextInput } from 'react-native';
-import { style } from '../Components/style';
+import { style } from "../../Styles/style";
 import { useState } from 'react';
 import { saveNote } from '../Notes/Firebase/SetNotes';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store';
 // import { appDispatch } from '../../Redux/store';
 // import { saveData } from '../../Redux/dispathcer';
 
@@ -10,14 +11,15 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
     const [Title, setTitle] = useState('');
     const [Discription, setDiscription] = useState('');
     const [pinned, setPinned] = useState(0);
+    const isDarkTheme = useSelector((store: RootState)=> store.themeState.isDarkTheme)
     // const dispatch = useDispatch<appDispatch>()
 
     return (
         <Modal visible={isModalOpenForCreateNote} animationType='slide' >
-            <KeyboardAvoidingView behavior={'height'} style={{ height: '100%' }}>
+            <KeyboardAvoidingView behavior={'height'} style={{ height: '100%', backgroundColor: isDarkTheme ? "grey" : 'white' }}>
                 <ScrollView style={{ flexGrow: 1 }}>
 
-                    <View style={[style.setRow, style.createNoteNavigationPanel,{height:'40%'}]}>
+                    <View style={[style.setRow, style.createNoteNavigationPanel, { height: '40%' }]}>
                         <Pressable onPress={() => {
 
                             if (Title !== '' || Discription !== '') { saveNote(Title, Discription, pinned, setSaved); }
@@ -44,7 +46,7 @@ export function OpenModalForCreateNote(isModalOpenForCreateNote: any, setModalFo
                         onChangeText={(value) => setTitle(value)} style={[style.largeText, { width: '100%' }]} />
 
                     <TextInput multiline={true} placeholder='Discription' value={Discription}
-                        onChangeText={(value) => setDiscription(value)} style={[style.discription, { height: '500%',  width: '100%', fontSize: 25 }]} />
+                        onChangeText={(value) => setDiscription(value)} style={[style.discription, { height: '500%', width: '100%', fontSize: 25 }]} />
 
                 </ScrollView>
 

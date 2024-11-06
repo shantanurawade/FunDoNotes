@@ -1,9 +1,19 @@
-// import { applyMiddleware, createStore } from "redux";
-// import rootReducer from "./rootreducer";
-// import { thunk } from 'redux-thunk'
+import { combineReducers, createStore } from "redux";
+import themeReducer from "./themeReducer";
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from '@react-native-async-storage/async-storage'
+import { internetState } from "./internetReducer";
 
+const persistConfig = {
+    key: "root",
+    storage
+}
 
-// export const store = createStore(rootReducer, applyMiddleware(thunk))
+const rootReducer = combineReducers({
+    themeState: persistReducer(persistConfig, themeReducer),
+    internetState : internetState
+})
 
-// export type appDispatch = typeof store.dispatch 
-// export type rootState = ReturnType<typeof store.getState>
+export const store = createStore(rootReducer);
+export type RootState = ReturnType<typeof rootReducer>;
+export const persistor = persistStore(store)

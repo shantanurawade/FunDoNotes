@@ -1,7 +1,10 @@
 import { StyleSheet, Dimensions } from "react-native"
+import { useSelector } from "react-redux";
+import { store } from "../../Redux/store";
 
 const { height, width } = Dimensions.get('window');
 
+// const isDarkTheme = useSelector((store) => store.themeState.isDarkTheme);
 const getResponsiveFontSize = (size) => {
     const baseWidth = 375;
     return size * (width / baseWidth);
@@ -18,7 +21,6 @@ export const style = StyleSheet.create({
     },
     createButton: {
         borderRadius: 40,
-        // borderWidth: 5,
         borderColor: 'white',
         backgroundColor: 'grey',
         width: width * 0.16,
@@ -76,6 +78,10 @@ export const style = StyleSheet.create({
         color: 'black',
         fontSize: getResponsiveFontSize(24)
     },
+    mediumTextDark: {
+        color: 'white',
+        fontSize: getResponsiveFontSize(24)
+    },
     discription: {
         textAlignVertical: 'top',
         fontSize: getResponsiveFontSize(18),
@@ -83,6 +89,10 @@ export const style = StyleSheet.create({
     },
     smallText: {
         color: 'black',
+        fontSize: getResponsiveFontSize(14)
+    },
+    smallTextDark: {
+        color: 'white',
         fontSize: getResponsiveFontSize(14)
     },
     xSmallText: {
@@ -109,8 +119,8 @@ export const style = StyleSheet.create({
         flexDirection: 'row'
     },
     text: {
-
-        color: 'black',
+        // backgroundColor: isDarkTheme ? "white" : 'black',
+        // color:  'black',
         textAlign: 'center'
     },
     textStart: {

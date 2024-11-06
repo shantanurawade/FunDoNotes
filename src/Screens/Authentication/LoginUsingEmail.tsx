@@ -1,8 +1,10 @@
 import { View, Text, Pressable, ActivityIndicator } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import React from 'react'
-import { style } from '../Components/style';
+import { style } from "../../Styles/style";
 import { useForm } from '../../utility/util';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store';
 
 const LoginUsingEmail = (props: any) => {
 
@@ -15,7 +17,7 @@ const LoginUsingEmail = (props: any) => {
     const isActivityLoading = props.isActivityLoading;
     const onLogin = props.onLogin;
     const { values, handleChange } = useForm({ email: '', password: '' })
-
+    const isDarkTheme = useSelector((store: RootState) => store.themeState.isDarkTheme)
     return (
 
         <View>
@@ -48,7 +50,7 @@ const LoginUsingEmail = (props: any) => {
                 secureTextEntry={!isChecked}
                 mode="outlined"
                 onChangeText={(text) => {
-                    handleChange("password", text);  
+                    handleChange("password", text);
                     // setUserCredential({ ...userCredential, password: value });
                     setError({ ...error, isPasswordError: false })
                 }} />
@@ -59,7 +61,7 @@ const LoginUsingEmail = (props: any) => {
 
                 }}>
                     <Text style={{ width: 18, color: 'white', borderWidth: 1, textAlign: 'center', backgroundColor: isChecked ? '#2596be' : 'white' }}>✓</Text>
-                    <Text style={{ flex: 1 }}>  Show password</Text>
+                    <Text style={{ flex: 1, color: isDarkTheme ? 'white' : 'black' }}>  Show password</Text>
 
                 </Pressable>
             </View>
@@ -84,6 +86,7 @@ const LoginUsingEmail = (props: any) => {
                     if (values.email != '' && values.password != '') onLogin(values.email, values.password);
                     else setError({ ...error, isPasswordError: true })
                 }}
+
                 style={[style.container, style.button, style.setMarginTop]}>
                 {isActivityLoading ? <ActivityIndicator size='large' color='#00ff00' /> :
                     <Text style={[style.text, style.smallText]}>Login</Text>}

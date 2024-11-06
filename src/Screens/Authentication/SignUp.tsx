@@ -1,5 +1,5 @@
 import { View, Text, Pressable, ScrollView, ToastAndroid } from "react-native";
-import { style } from "../Components/style";
+import { style } from "../../Styles/style";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import auth, { } from '@react-native-firebase/auth';
@@ -63,7 +63,7 @@ function SignUp(props: any) {
     return (
         
         //UI for signUp. 
-        <SafeAreaView style={[style.container, style.setFlex1]}>
+        <SafeAreaView style={[style.container, style.setFlex1, { backgroundColor:'black'}]}>
             <ScrollView>
                 <View style={style.setMargin}>
 

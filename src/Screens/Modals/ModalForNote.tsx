@@ -1,8 +1,10 @@
 import { Text, View, Pressable, Modal, KeyboardAvoidingView, TextInput } from 'react-native';
-import { style } from '../Components/style';
+import { style } from "../../Styles/style";
 import { } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { saveNote, updateNote } from '../Notes/Firebase/SetNotes';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store';
 
 
 
@@ -15,7 +17,8 @@ export function ModalForNote(currentNote: any, onClickNote: any, setOnClickNote:
     const [pinnedState, setPinnedState] = useState(false)
     const [recycled, setRecycled] = useState(0)
     const [recycledState, setRecycledState] = useState(false)
-    const [archieve, setArchieve] = useState(false)
+    const [archieve, setArchieve] = useState(0)
+    const isDarkTheme = useSelector((store: RootState)=> store.themeState.isDarkTheme)
     useEffect(() => {
         console.log('hello');
         setDescription(currentNote?.description);
@@ -25,7 +28,7 @@ export function ModalForNote(currentNote: any, onClickNote: any, setOnClickNote:
     }, [onClickNote])
     return (
         <Modal visible={onClickNote} animationType='fade' >
-            <View style={{ height: '200%' }}>
+            <View style={{ height: '200%', backgroundColor: isDarkTheme ? "grey" : 'white' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Pressable onPress={() => {
                         setPinned(currentNote.pinned)
@@ -33,14 +36,14 @@ export function ModalForNote(currentNote: any, onClickNote: any, setOnClickNote:
                         console.log(pinned);
                         console.log("this is variable ");
                         console.log(currentNote.pinned);
-                        updateNote(title, description, pinned, recycled, index, setSaved);
+                        updateNote(title, description, pinned, recycled, index, setSaved, archieve);
                         setOnClickNote(false);
                     }}>
                         <Text style={style.largeText}>  {"<"}</Text>
                     </Pressable>
                     <View style={{ alignItems: 'flex-end', alignSelf: 'center', flexDirection: 'row' }}>
                         <Pressable onPress={() => {
-                            setArchieve(true)
+                            setArchieve(1);
                         }}>
                             <Text style={[style.mediumText,
                             { fontWeight: '400' }]}>  📩</Text>
@@ -66,7 +69,7 @@ export function ModalForNote(currentNote: any, onClickNote: any, setOnClickNote:
                 <View >
                     <TextInput value={title} placeholder='Title' onChangeText={(value) => { setTitle(value) }} style={[style.largeText, { width: '100%' }]} />
                 </View>
-                <TextInput multiline={true} placeholder='Description' value={description} onChangeText={(value) => { setDescription(value) }} style={[style.discription, { height: 500 }]} />
+                <TextInput multiline={true} placeholder='Description' value={description} onChangeText={(value) => { setDescription(value) }} style={[style.discription, { height: 500, color:'black' }]} />
                 <Text ></Text>
             </View>
         </Modal>

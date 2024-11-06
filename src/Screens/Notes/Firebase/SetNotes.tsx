@@ -10,7 +10,7 @@ const uid = auth().currentUser;
 // const dispatch = useDispatch();
 
 
-const  handleSavedNotes =(item: any)=>{
+const handleSavedNotes = (item: any) => {
     console.log('====================================');
     console.log("saved");
     console.log('====================================');
@@ -27,7 +27,8 @@ export const saveNote = async (title: string, description: string, pinned: numbe
                 title: title,
                 description: description,
                 pinned: pinned,
-                recycled: 0
+                recycled: 0,
+                archived: 0
             });
             console.log("Note saved successfully!");
             setSaved(true);
@@ -43,7 +44,7 @@ export const saveNote = async (title: string, description: string, pinned: numbe
 
 
 
-export const updateNote = async (title: string, description: string, pinned: number, recycled: number, noteId: any, setSaved: any) => {
+export const updateNote = async (title: string, description: string, pinned: number, recycled: number, noteId: any, setSaved: any, archived: any) => {
 
     // const currentDate: string = Date.now().toString();
 
@@ -57,10 +58,11 @@ export const updateNote = async (title: string, description: string, pinned: num
 
         if (uid) {
             await setDoc(doc(db, "users", uid.uid, "notes", noteId), {
-                title: title,
-                description: description,
-                pinned: pinned,
-                recycled: recycled
+                title,
+                description,
+                pinned,
+                recycled,
+                archived
             });
             console.log("Note saved successfully!");
             setSaved(true)
